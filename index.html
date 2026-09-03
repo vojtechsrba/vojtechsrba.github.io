@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vojtěch Srba — Projektant pozemních staveb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1A1A1A; --bg-raise:#202020; --card:#242424;
+    --ink:#fff; --muted:rgba(255,255,255,.6); --faint:rgba(255,255,255,.32);
+    --accent:#B59E7D; --accent-dim:rgba(181,158,125,.12); --accent-mid:rgba(181,158,125,.35);
+    --line:rgba(255,255,255,.08); --r:6px;
+    --concrete:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:60px}
+  body{font-family:'Sansation',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+    background-size:36px 36px}
+
+  nav{position:fixed;inset:0 0 auto 0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 3rem;background:rgba(26,26,26,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .logo{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.05em}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;text-transform:uppercase;letter-spacing:.04em}
+  .nav-links a:hover{color:var(--accent)}
+  .btn{display:inline-block;padding:11px 22px;border-radius:var(--r);font-size:13px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.04em;text-decoration:none;cursor:pointer;border:1px solid transparent}
+  .btn-primary{background:var(--accent) var(--concrete);background-blend-mode:multiply;color:#1A1A1A}
+  .btn-outline{background:var(--card);border-color:var(--line);color:var(--ink)}
+  .btn-outline:hover{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+
+  #snap-bar{position:fixed;top:60px;left:0;width:100%;height:3px;background:var(--line);z-index:99}
+  #snap-fill{height:100%;width:0%;background:var(--accent)}
+
+  .hero{padding:9rem 3rem 5rem;max-width:800px;margin:0 auto;text-align:center}
+  .tag{color:var(--accent);text-transform:uppercase;letter-spacing:.1em;font-size:13px;margin-bottom:1rem}
+  .hero h1{font-size:clamp(2.6rem,6vw,4rem);margin-bottom:1.2rem}
+  .hero p{color:var(--muted);font-size:18px;max-width:56ch;margin:0 auto 2rem}
+  .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
+  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:6rem 0}
+  .container{max-width:1000px;margin:0 auto;padding:0 3rem}
+  #about{background:var(--bg-raise)}
+  h2.title{font-size:2rem;margin-bottom:2.5rem}
+
+  .about-grid{display:grid;grid-template-columns:2fr 1fr;gap:3.5rem}
+  .about-grid p{color:var(--muted);margin-bottom:1.1rem}
+  .about-grid strong{color:var(--ink)}
+  .skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.5rem}
+  .tag-pill{font-size:13px;padding:6px 12px;border-radius:20px;border:1px solid var(--accent-mid);color:var(--accent);background:var(--accent-dim)}
+  .tag-pill.main{background:var(--accent) var(--concrete);background-blend-mode:multiply;color:#1A1A1A;font-weight:700}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.8rem}
+  .card h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:1.2rem}
+  .row{display:grid;grid-template-columns:132px 1fr;gap:10px;margin-bottom:.8rem;font-size:14px;align-items:start}
+  .row span:first-child{color:var(--faint);font-size:12px;text-transform:uppercase;white-space:nowrap}
+
+  .empty{border:1px dashed var(--line);border-radius:var(--r);padding:3rem;text-align:center;color:var(--faint)}
+
+  .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  .edu-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.8rem}
+  .edu-card .yr{color:var(--accent);font-size:13px;margin-bottom:.5rem}
+  .edu-card h3{font-size:18px;margin-bottom:.3rem}
+  .edu-card p{color:var(--muted);font-size:14px}
+
+  #contact{background:var(--bg-raise);text-align:center;padding:5rem 0;border-top:1px solid var(--line)}
+  #contact p{color:var(--muted);max-width:44ch;margin:0 auto 2rem}
+  .cta-email{font-size:1.8rem;color:var(--accent);text-decoration:none;border-bottom:2px solid var(--accent-mid)}
+  .footer-bottom{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;
+    justify-content:space-between;color:var(--faint);font-size:13px}
+  .to-top{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
+    margin-top:2.5rem;border-radius:50%;border:1px solid var(--accent-mid);color:var(--accent);
+    text-decoration:none;transition:background .2s,transform .2s}
+  .to-top:hover{background:var(--accent-dim);transform:translateY(-3px)}
+
+  @media(max-width:800px){
+    nav{padding:0 1.2rem}.nav-links{display:none}
+    .container,.hero{padding-left:1.2rem;padding-right:1.2rem}
+    .about-grid,.edu-grid{grid-template-columns:1fr}
+    .footer-bottom{flex-direction:column;gap:6px}
+  }
+  @media print{
+    @page{size:A4;margin:16mm}
+    nav,.hero-btns,.empty,#snap-bar,.to-top{display:none!important}
+    html,body{background:#fff;color:#111;background-image:none}
+    section{min-height:0!important;display:block!important;padding:0 0 10mm!important}
+    .hero{max-width:none;padding:0 0 8mm;text-align:left}
+    .container{padding:0;max-width:none}
+    #about,#education{background:#fff!important}
+    h2.title{font-size:16pt;margin-bottom:4mm;page-break-after:avoid}
+    .hero h1{font-size:22pt}
+    .tag{color:#555}
+    .hero p,.about-grid p,.edu-card p,#contact p{color:#333}
+    p,.card,.edu-card{page-break-inside:avoid}
+    .about-grid,.edu-grid{display:block}
+    .about-grid>div:first-child{margin-bottom:6mm}
+    .card,.edu-card{background:#fff;border:1px solid #ccc;margin-bottom:4mm}
+    .tag-pill{background:#eee!important;color:#111!important;border-color:#ccc}
+    .cta-email{color:#111}
+    .footer-bottom{color:#666}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">Vojtěch Srba</a>
+  <ul class="nav-links">
+    <li><a href="#about">O mně</a></li>
+    <li><a href="#experience">Zkušenosti</a></li>
+    <li><a href="#education">Vzdělání</a></li>
+    <li><a href="#projects">Projekty</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <a href="#" class="btn btn-primary" onclick="window.print();return false" style="padding:8px 16px;font-size:12px">Stáhnout CV</a>
+</nav>
+<div id="snap-bar"><div id="snap-fill"></div></div>
+
+<section class="hero">
+  <p class="tag">Projektant pozemních staveb</p>
+  <h1>Ing. Vojtěch Srba</h1>
+  <p>Absolvent Fakulty stavební VUT v Brně se specializací na pozemní stavby. Navrhuji stavební řešení s důrazem na přesnost, funkčnost a moderní BIM postupy v prostředí Revit.</p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn btn-primary">Zobrazit projekty</a>
+    <a href="#contact" class="btn btn-outline">Kontaktovat</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <h2 class="title">O mně</h2>
+    <div class="about-grid">
+      <div>
+        <p>Jsem absolventem Fakulty stavební VUT v Brně, obor pozemní stavby se specializací na <strong>projektování</strong>. Během studia jsem získal praktické zkušenosti v projekčním ateliéru a zároveň jsem samostatně a externě realizoval individuální zakázky pro architekty a projektanty.</p>
+        <p>Svou profesní budoucnost vidím v projektování pozemních staveb s důrazem na precizní zpracování dokumentace a efektivní využití moderních BIM nástrojů, především <strong>Revitu</strong>. Jsem pečlivý, spolehlivý a mám zájem se dále profesně rozvíjet.</p>
+        <div class="skills">
+          <span class="tag-pill main">Revit</span>
+          <span class="tag-pill">AutoCAD</span>
+          <span class="tag-pill">CADkon</span>
+          <span class="tag-pill">Twinmotion</span>
+          <span class="tag-pill">Lumion</span>
+          <span class="tag-pill">SketchUp</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Kontaktní údaje</h3>
+        <div class="row"><span>Email</span><span>vojtech.srba@email.cz</span></div>
+        <div class="row"><span>Telefon</span><span>605 150 523</span></div>
+        <div class="row"><span>Město</span><span>Brno</span></div>
+        <div class="row"><span>Řidičský průkaz</span><span>Skupina B</span></div>
+        <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--line)">
+          <h3>Jazyky</h3>
+          <div class="row"><span>Čeština</span><span>Rodilý mluvčí</span></div>
+          <div class="row"><span>Angličtina</span><span>B2</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <h2 class="title">Zkušenosti</h2>
+    <div class="empty">Tato sekce bude v brzké době doplněna.</div>
+  </div>
+</section>
+
+<section id="education" style="background:var(--bg-raise)">
+  <div class="container">
+    <h2 class="title">Vzdělání</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <p class="yr">Magisterské studium</p>
+        <h3>FAST VUT v Brně</h3>
+        <p>Fakulta stavební, obor pozemní stavby — projektování.</p>
+      </div>
+      <div class="edu-card">
+        <p class="yr">Čtyřleté studium</p>
+        <h3>Gymnázium Vsetín</h3>
+        <p>Všeobecné zaměření, maturita z angličtiny.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <h2 class="title">Vybrané projekty</h2>
+    <div class="empty">Vybrané projekty budou v brzké době doplněny.</div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <h2 class="title">Pojďme spolupracovat</h2>
+    <p>Hledáte projektanta pozemních staveb se zaměřením na moderní BIM postupy? Rád s vámi proberu možnou spolupráci.</p>
+    <a href="mailto:vojtech.srba@email.cz" class="cta-email">vojtech.srba@email.cz</a>
+    <div class="footer-bottom">
+      <span>© 2026 Ing. Vojtěch Srba</span>
+      <span>Brno, CZ</span>
+      <span>Projektant pozemních staveb</span>
+    </div>
+    <a href="#" class="to-top" aria-label="Nahoru" onclick="window.scrollToTop();return false">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16V4M4 9l6-6 6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+<script>
+(function(){
+  var sectionEls = document.querySelectorAll('section');
+  var tops = Array.prototype.map.call(sectionEls, function(s){ return s.offsetTop - 60; });
+  var heights = Array.prototype.map.call(sectionEls, function(s){ return s.offsetHeight; });
+  var fill = document.getElementById('snap-fill');
+  var html = document.documentElement;
+  var animating = false;
+
+  function ease(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3) / 2; }
+  function setFill(v){ fill.style.width = (Math.max(0, Math.min(1, v)) * 100) + '%'; }
+  function nearestIndex(y){
+    var best = 0, bestDist = Infinity;
+    for(var k = 0; k < tops.length; k++){
+      var d = Math.abs(y - tops[k]);
+      if(d < bestDist){ bestDist = d; best = k; }
+    }
+    return best;
+  }
+
+  function goTo(target){
+    var startY = window.scrollY, diff = target - startY, startTime = null;
+    if(Math.abs(diff) < 1) return;
+    animating = true;
+    var prevBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto'; // avoid fighting the CSS smooth-scroll while we animate manually
+    function step(ts){
+      if(!startTime) startTime = ts;
+      var t = Math.min((ts - startTime) / 500, 1);
+      window.scrollTo(0, startY + diff * ease(t));
+      setFill(ease(t));
+      if(t < 1){ requestAnimationFrame(step); }
+      else{ animating = false; html.style.scrollBehavior = prevBehavior; }
+    }
+    requestAnimationFrame(step);
+  }
+
+  window.addEventListener('scroll', function(){
+    if(animating) return;
+    var y = window.scrollY, i = nearestIndex(y), delta = y - tops[i];
+    // trigger boundary = 1/3 of the height of the page you're scrolling toward
+    var dist = delta >= 0
+      ? heights[Math.min(i + 1, heights.length - 1)] / 3
+      : heights[Math.max(i - 1, 0)] / 3;
+    setFill(1 - Math.abs(delta) / dist);
+    if(delta >= dist && i < tops.length - 1) goTo(tops[i + 1]);
+    else if(delta <= -dist && i > 0) goTo(tops[i - 1]);
+  }, {passive:true});
+
+  setFill(1);
+  window.scrollToTop = function(){ goTo(0); };
+})();
+</script>
+</body>
+</html>
