@@ -35,7 +35,14 @@
   #snap-bar{position:fixed;top:60px;left:0;width:100%;height:3px;background:var(--line);z-index:99}
   #snap-fill{height:100%;width:0%;background:var(--accent)}
 
-  .hero{padding:9rem 3rem 5rem;max-width:800px;margin:0 auto;text-align:center}
+  .hero{position:relative;overflow:hidden;padding:9rem 3rem 5rem}
+  .hero-bg{position:absolute;inset:0;z-index:0;
+    background-image:
+      linear-gradient(100deg, var(--bg) 0%, var(--bg) 30%, rgba(26,26,26,.6) 58%, rgba(26,26,26,.25) 90%),
+      url("images/uvodni-01.jpg");
+    background-size:cover;background-position:center 38%;background-repeat:no-repeat;
+    filter:grayscale(.85) brightness(.62) contrast(1.08) saturate(.9)}
+  .hero-content{position:relative;z-index:1;max-width:800px;margin:0 auto;text-align:center}
   .tag{color:var(--accent);text-transform:uppercase;letter-spacing:.1em;font-size:13px;margin-bottom:1rem}
   .hero h1{font-size:clamp(2.6rem,6vw,4rem);margin-bottom:1.2rem}
   .hero p{color:var(--muted);font-size:18px;max-width:56ch;margin:0 auto 2rem}
@@ -49,15 +56,39 @@
   .about-grid p{color:var(--muted);margin-bottom:1.1rem}
   .about-grid strong{color:var(--ink)}
   .skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.5rem}
-  .tag-pill{font-size:13px;padding:6px 12px;border-radius:20px;border:1px solid var(--accent-mid);color:var(--accent);background:var(--accent-dim)}
+  .tag-pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;padding:6px 14px 6px 8px;
+    border-radius:20px;border:1px solid var(--accent-mid);color:var(--accent);background:var(--accent-dim)}
+  .tag-pill img{width:18px;height:18px;object-fit:contain;display:block}
   .tag-pill.main{background:var(--accent) var(--concrete);background-blend-mode:multiply;color:#1A1A1A;font-weight:700}
+  .tag-pill.main img{filter:brightness(0)}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.8rem}
   .card h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:1.2rem}
   .row{display:grid;grid-template-columns:132px 1fr;gap:10px;margin-bottom:.8rem;font-size:14px;align-items:start}
   .row span:first-child{color:var(--faint);font-size:12px;text-transform:uppercase;white-space:nowrap}
 
+  .side-col{display:flex;flex-direction:column;gap:1.5rem}
+  .photo-placeholder{position:relative;aspect-ratio:1/1;border-radius:var(--r);background:var(--card);
+    border:1px dashed var(--line);background-size:cover;background-position:center;overflow:hidden}
+  .photo-placeholder span{position:absolute;left:.7rem;bottom:.6rem;font-size:12px;letter-spacing:.05em;
+    color:var(--faint);background:rgba(26,26,26,.55);padding:2px 8px;border-radius:20px}
+
   .empty{border:1px dashed var(--line);border-radius:var(--r);padding:3rem;text-align:center;color:var(--faint)}
+
+  .proj-cat{margin-bottom:2.8rem}
+  .proj-cat:last-child{margin-bottom:0}
+  .proj-cat-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    flex-wrap:wrap;margin-bottom:1rem}
+  .proj-cat-head h3{font-size:1.05rem}
+  .proj-cat-head p{color:var(--muted);font-size:14px}
+  .proj-scroll{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.6rem;scroll-snap-type:x proximity}
+  .proj-scroll::-webkit-scrollbar{height:5px}
+  .proj-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+  .proj-tile{position:relative;flex:0 0 210px;height:150px;border-radius:var(--r);background:var(--card);
+    border:1px dashed var(--line);background-size:cover;background-position:center;
+    scroll-snap-align:start;overflow:hidden}
+  .proj-tile span{position:absolute;left:.6rem;bottom:.5rem;font-size:12px;letter-spacing:.05em;
+    color:var(--faint);background:rgba(26,26,26,.55);padding:2px 8px;border-radius:20px}
 
   .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
   .edu-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.8rem}
@@ -83,10 +114,11 @@
   }
   @media print{
     @page{size:A4;margin:16mm}
-    nav,.hero-btns,.empty,#snap-bar,.to-top{display:none!important}
+    nav,.hero-btns,.empty,#snap-bar,.to-top,.hero-bg,.photo-placeholder{display:none!important}
     html,body{background:#fff;color:#111;background-image:none}
     section{min-height:0!important;display:block!important;padding:0 0 10mm!important}
-    .hero{max-width:none;padding:0 0 8mm;text-align:left}
+    .hero{max-width:none;padding:0 0 8mm}
+    .hero-content{max-width:none;margin:0;text-align:left}
     .container{padding:0;max-width:none}
     #about,#education{background:#fff!important}
     h2.title{font-size:16pt;margin-bottom:4mm;page-break-after:avoid}
@@ -98,8 +130,12 @@
     .about-grid>div:first-child{margin-bottom:6mm}
     .card,.edu-card{background:#fff;border:1px solid #ccc;margin-bottom:4mm}
     .tag-pill{background:#eee!important;color:#111!important;border-color:#ccc}
+    .tag-pill img{filter:brightness(0) opacity(.7)}
     .cta-email{color:#111}
     .footer-bottom{color:#666}
+    .proj-scroll{overflow:visible;flex-wrap:wrap}
+    .proj-tile{background:#fff;border:1px solid #ccc}
+    .proj-tile span{background:#eee;color:#333}
   }
 </style>
 </head>
@@ -119,12 +155,15 @@
 <div id="snap-bar"><div id="snap-fill"></div></div>
 
 <section class="hero">
-  <p class="tag">Projektant pozemních staveb</p>
-  <h1>Ing. Vojtěch Srba</h1>
-  <p>Absolvent Fakulty stavební VUT v Brně se specializací na pozemní stavby. Navrhuji stavební řešení s důrazem na přesnost, funkčnost a moderní BIM postupy v prostředí Revit.</p>
-  <div class="hero-btns">
-    <a href="#projects" class="btn btn-primary">Zobrazit projekty</a>
-    <a href="#contact" class="btn btn-outline">Kontaktovat</a>
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-content">
+    <p class="tag">Projektant pozemních staveb</p>
+    <h1>Ing. Vojtěch Srba</h1>
+    <p>Absolvent Fakulty stavební VUT v Brně se specializací na pozemní stavby. Navrhuji stavební řešení s důrazem na přesnost, funkčnost a moderní BIM postupy v prostředí Revit.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">Zobrazit projekty</a>
+      <a href="#contact" class="btn btn-outline">Kontaktovat</a>
+    </div>
   </div>
 </section>
 
@@ -136,24 +175,27 @@
         <p>Jsem absolventem Fakulty stavební VUT v Brně, obor pozemní stavby se specializací na <strong>projektování</strong>. Během studia jsem získal praktické zkušenosti v projekčním ateliéru a zároveň jsem samostatně a externě realizoval individuální zakázky pro architekty a projektanty.</p>
         <p>Svou profesní budoucnost vidím v projektování pozemních staveb s důrazem na precizní zpracování dokumentace a efektivní využití moderních BIM nástrojů, především <strong>Revitu</strong>. Jsem pečlivý, spolehlivý a mám zájem se dále profesně rozvíjet.</p>
         <div class="skills">
-          <span class="tag-pill main">Revit</span>
-          <span class="tag-pill">AutoCAD</span>
-          <span class="tag-pill">CADkon</span>
-          <span class="tag-pill">Twinmotion</span>
-          <span class="tag-pill">Lumion</span>
-          <span class="tag-pill">SketchUp</span>
+          <span class="tag-pill main"><img src="images/icons/revit.png" alt="">Revit</span>
+          <span class="tag-pill"><img src="images/icons/autocad.png" alt="">AutoCAD</span>
+          <span class="tag-pill"><img src="images/icons/cadkon.png" alt="">CADkon</span>
+          <span class="tag-pill"><img src="images/icons/twinmotion.png" alt="">Twinmotion</span>
+          <span class="tag-pill"><img src="images/icons/lumion.png" alt="">Lumion</span>
+          <span class="tag-pill"><img src="images/icons/sketchup.png" alt="">SketchUp</span>
         </div>
       </div>
-      <div class="card">
-        <h3>Kontaktní údaje</h3>
-        <div class="row"><span>Email</span><span>vojtech.srba@email.cz</span></div>
-        <div class="row"><span>Telefon</span><span>605 150 523</span></div>
-        <div class="row"><span>Město</span><span>Brno</span></div>
-        <div class="row"><span>Řidičský průkaz</span><span>Skupina B</span></div>
-        <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--line)">
-          <h3>Jazyky</h3>
-          <div class="row"><span>Čeština</span><span>Rodilý mluvčí</span></div>
-          <div class="row"><span>Angličtina</span><span>B2</span></div>
+      <div class="side-col">
+        <div class="photo-placeholder" style="background-image:url('images/ja-01.jpg')"><span>Foto</span></div>
+        <div class="card">
+          <h3>Kontaktní údaje</h3>
+          <div class="row"><span>Email</span><span>vojtech.srba@email.cz</span></div>
+          <div class="row"><span>Telefon</span><span>605 150 523</span></div>
+          <div class="row"><span>Město</span><span>Brno</span></div>
+          <div class="row"><span>Řidičský průkaz</span><span>Skupina B</span></div>
+          <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--line)">
+            <h3>Jazyky</h3>
+            <div class="row"><span>Čeština</span><span>Rodilý mluvčí</span></div>
+            <div class="row"><span>Angličtina</span><span>B2</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -188,7 +230,59 @@
 <section id="projects">
   <div class="container">
     <h2 class="title">Vybrané projekty</h2>
-    <div class="empty">Vybrané projekty budou v brzké době doplněny.</div>
+
+    <div class="proj-cat">
+      <div class="proj-cat-head">
+        <h3>Školní projekty</h3>
+        <p>Návrhy zpracované v rámci studia na FAST VUT.</p>
+      </div>
+      <div class="proj-scroll">
+        <div class="proj-tile" style="background-image:url('images/skolni-01.jpg')"><span>č. 01</span></div>
+        <div class="proj-tile" style="background-image:url('images/skolni-02.jpg')"><span>č. 02</span></div>
+        <div class="proj-tile" style="background-image:url('images/skolni-03.jpg')"><span>č. 03</span></div>
+        <div class="proj-tile" style="background-image:url('images/skolni-04.jpg')"><span>č. 04</span></div>
+      </div>
+    </div>
+
+    <div class="proj-cat">
+      <div class="proj-cat-head">
+        <h3>Bakalářská a diplomová práce</h3>
+        <p>Výstupy ze závěrečných prací.</p>
+      </div>
+      <div class="proj-scroll">
+        <div class="proj-tile" style="background-image:url('images/bakalarka-01.jpg')"><span>č. 01</span></div>
+        <div class="proj-tile" style="background-image:url('images/bakalarka-02.jpg')"><span>č. 02</span></div>
+        <div class="proj-tile" style="background-image:url('images/bakalarka-03.jpg')"><span>č. 03</span></div>
+      </div>
+    </div>
+
+    <div class="proj-cat">
+      <div class="proj-cat-head">
+        <h3>Projekty z praxe</h3>
+        <p>Realizace a dokumentace z profesní praxe.</p>
+      </div>
+      <div class="proj-scroll">
+        <div class="proj-tile" style="background-image:url('images/prace-01.jpg')"><span>č. 01</span></div>
+        <div class="proj-tile" style="background-image:url('images/prace-02.jpg')"><span>č. 02</span></div>
+        <div class="proj-tile" style="background-image:url('images/prace-03.jpg')"><span>č. 03</span></div>
+        <div class="proj-tile" style="background-image:url('images/prace-04.jpg')"><span>č. 04</span></div>
+      </div>
+    </div>
+
+    <div class="proj-cat">
+      <div class="proj-cat-head">
+        <h3>Revit — rodiny a knihovny</h3>
+        <p>Ukázky vytvořených rodin a BIM komponent.</p>
+      </div>
+      <div class="proj-scroll">
+        <div class="proj-tile" style="background-image:url('images/revit-01.jpg')"><span>č. 01</span></div>
+        <div class="proj-tile" style="background-image:url('images/revit-02.jpg')"><span>č. 02</span></div>
+        <div class="proj-tile" style="background-image:url('images/revit-03.jpg')"><span>č. 03</span></div>
+        <div class="proj-tile" style="background-image:url('images/revit-04.jpg')"><span>č. 04</span></div>
+        <div class="proj-tile" style="background-image:url('images/revit-05.jpg')"><span>č. 05</span></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
