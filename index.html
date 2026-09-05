@@ -307,6 +307,19 @@
 
 <script>
 (function(){
+  // Snapování chceme jen na zařízeních ovládaných myší (přesný ukazatel + hover).
+  // Na dotykových zařízeních (mobil, tablet) necháme stránku volně scrollovat —
+  // je to spolehlivější než se snažit ošetřit všechny varianty dotykového chování.
+  var isMouseDevice = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var snapBar = document.getElementById('snap-bar');
+  if(!isMouseDevice){
+    if(snapBar) snapBar.style.display = 'none';
+    window.scrollToTop = function(){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    return; // žádné snap listenery — čistě přirozený scroll
+  }
+
   var sectionEls = document.querySelectorAll('section');
   var fill = document.getElementById('snap-fill');
   var html = document.documentElement;
