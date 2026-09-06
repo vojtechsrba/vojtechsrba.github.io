@@ -104,10 +104,13 @@
   .proj-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75)}
   .proj-modal-panel{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
     max-width:1080px;width:100%;max-height:90vh;overflow:auto}
-  .proj-modal-close{position:absolute;top:.8rem;right:.8rem;width:36px;height:36px;border-radius:50%;
-    border:1px solid var(--line);background:rgba(var(--bg-rgb),.6);color:var(--ink);font-size:16px;
-    line-height:1;cursor:pointer;z-index:2}
-  .proj-modal-media{position:relative;width:100%;padding-top:60%;background:#000}
+  .proj-modal-close{position:absolute;top:.8rem;right:.8rem;width:40px;height:40px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    border:1px solid var(--accent-mid);background:rgba(var(--bg-rgb),.55);color:var(--accent);
+    cursor:pointer;z-index:2;transition:background .2s,transform .2s}
+  .proj-modal-close:hover{background:var(--accent-dim)}
+  .proj-modal-close svg{width:16px;height:16px;display:block}
+  .proj-modal-media{position:relative;width:100%;padding-top:56.25%;background:#000}
   .proj-modal-photo{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center}
   .proj-modal-nav{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;
     border-radius:50%;border:1px solid var(--accent-mid);background:transparent;color:var(--accent);
@@ -324,7 +327,9 @@
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L6 10l6 6"/></svg>
   </button>
   <div class="proj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="proj-modal-title">
-    <button type="button" class="proj-modal-close" data-close aria-label="Zavřít">✕</button>
+    <button type="button" class="proj-modal-close" data-close aria-label="Zavřít">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
+    </button>
     <div class="proj-modal-media">
       <div class="proj-modal-photo"></div>
       <div class="proj-modal-dots"></div>
@@ -524,14 +529,19 @@
   var titleEl = modal.querySelector('.proj-modal-title');
   var metaEl = modal.querySelector('.proj-modal-meta');
   var descEl = modal.querySelector('.proj-modal-desc');
+  var prevBtn = modal.querySelector('.proj-modal-nav.prev');
+  var nextBtn = modal.querySelector('.proj-modal-nav.next');
   var current = null, imgIndex = 0;
 
   function showImage(i){
-    imgIndex = (i + current.images.length) % current.images.length;
+    imgIndex = Math.max(0, Math.min(current.images.length - 1, i));
     photoEl.style.backgroundImage = "url('" + current.images[imgIndex] + "')";
     dotsEl.querySelectorAll('span').forEach(function(dot, k){
       dot.classList.toggle('active', k === imgIndex);
     });
+    var multi = current.images.length > 1;
+    prevBtn.style.display = (multi && imgIndex > 0) ? 'flex' : 'none';
+    nextBtn.style.display = (multi && imgIndex < current.images.length - 1) ? 'flex' : 'none';
   }
 
   function openModal(project){
@@ -544,9 +554,6 @@
       }).join(', ') + '</span>';
     dotsEl.innerHTML = project.images.map(function(){ return '<span></span>'; }).join('');
     dotsEl.style.display = project.images.length > 1 ? 'flex' : 'none';
-    modal.querySelectorAll('.proj-modal-nav').forEach(function(btn){
-      btn.style.display = project.images.length > 1 ? 'flex' : 'none';
-    });
     showImage(0);
     modal.hidden = false;
     document.documentElement.style.overflow = 'hidden';
@@ -563,8 +570,11 @@
   modal.querySelectorAll('[data-close]').forEach(function(el){
     el.addEventListener('click', closeModal);
   });
-  modal.querySelector('.proj-modal-nav.prev').addEventListener('click', function(){ showImage(imgIndex - 1); });
-  modal.querySelector('.proj-modal-nav.next').addEventListener('click', function(){ showImage(imgIndex + 1); });
+  // event delegation for nav clicks — robust even if buttons get re-rendered later
+  modal.addEventListener('click', function(e){
+    if(e.target.closest('.proj-modal-nav.prev')) showImage(imgIndex - 1);
+    else if(e.target.closest('.proj-modal-nav.next')) showImage(imgIndex + 1);
+  });
   document.addEventListener('keydown', function(e){
     if(modal.hidden) return;
     if(e.key === 'Escape') closeModal();
