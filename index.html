@@ -98,7 +98,8 @@
   .proj-card-photo{width:100%;padding-top:66.67%;background:#4d4d4d;background-size:cover;background-position:center}
   .proj-card-name{padding:.9rem 1rem;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-  .proj-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem}
+  .proj-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+    gap:1.2rem;padding:2rem}
   .proj-modal[hidden]{display:none}
   .proj-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75)}
   .proj-modal-panel{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
@@ -107,12 +108,12 @@
     border:1px solid var(--line);background:rgba(var(--bg-rgb),.6);color:var(--ink);font-size:16px;
     line-height:1;cursor:pointer;z-index:2}
   .proj-modal-media{position:relative;width:100%;padding-top:60%;background:#000}
-  .proj-modal-photo{position:absolute;inset:0;background-size:cover;background-position:center}
-  .proj-modal-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;
-    border-radius:50%;border:none;background:rgba(var(--bg-rgb),.55);color:#fff;font-size:20px;
-    line-height:1;cursor:pointer}
-  .proj-modal-nav.prev{left:.8rem}
-  .proj-modal-nav.next{right:.8rem}
+  .proj-modal-photo{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center}
+  .proj-modal-nav{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;
+    border-radius:50%;border:1px solid var(--accent-mid);background:transparent;color:var(--accent);
+    cursor:pointer;transition:background .2s,transform .2s}
+  .proj-modal-nav:hover{background:var(--accent-dim)}
+  .proj-modal-nav svg{width:20px;height:20px;display:block}
   .proj-modal-dots{position:absolute;bottom:.8rem;left:0;right:0;display:flex;justify-content:center;gap:6px}
   .proj-modal-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4)}
   .proj-modal-dots span.active{background:#fff}
@@ -121,6 +122,11 @@
   .proj-modal-meta{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;margin-bottom:1rem;font-size:14px;color:var(--muted)}
   .proj-modal-meta strong{color:var(--ink);font-weight:600}
   .proj-modal-desc{color:var(--muted);font-size:14px;line-height:1.7}
+  @media(max-width:900px){
+    .proj-modal{gap:.4rem;padding:.6rem}
+    .proj-modal-nav{width:38px;height:38px}
+    .proj-modal-nav svg{width:16px;height:16px}
+  }
 
   .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
   .edu-card{text-align:center}
@@ -314,12 +320,13 @@
 
 <div id="proj-modal" class="proj-modal" hidden>
   <div class="proj-modal-backdrop" data-close></div>
+  <button type="button" class="proj-modal-nav prev" aria-label="Předchozí obrázek">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L6 10l6 6"/></svg>
+  </button>
   <div class="proj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="proj-modal-title">
     <button type="button" class="proj-modal-close" data-close aria-label="Zavřít">✕</button>
     <div class="proj-modal-media">
-      <button type="button" class="proj-modal-nav prev" aria-label="Předchozí obrázek">‹</button>
       <div class="proj-modal-photo"></div>
-      <button type="button" class="proj-modal-nav next" aria-label="Další obrázek">›</button>
       <div class="proj-modal-dots"></div>
     </div>
     <div class="proj-modal-info">
@@ -328,6 +335,9 @@
       <p class="proj-modal-desc"></p>
     </div>
   </div>
+  <button type="button" class="proj-modal-nav next" aria-label="Další obrázek">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l6 6-6 6"/></svg>
+  </button>
 </div>
 
 <section id="contact">
