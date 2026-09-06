@@ -58,7 +58,7 @@
   #about{background:var(--bg-raise)}
   h2.title{font-size:2rem;margin-bottom:2.5rem;text-align:center}
 
-  .about-grid{display:grid;grid-template-columns:2fr 1fr;gap:3.5rem}
+  .about-grid{display:grid;grid-template-columns:1fr 21rem;gap:3.5rem}
   .about-grid p{color:var(--muted);margin-bottom:1.1rem;text-align:justify}
   .about-grid strong{color:var(--ink)}
   .skills{display:flex;flex-wrap:wrap;gap:1.6rem 2.2rem;margin-top:1.5rem}
@@ -67,20 +67,19 @@
   .tag-pill img{width:32px;height:32px;object-fit:contain;display:block;flex-shrink:0}
   .tag-pill.main{font-weight:700}
 
-  .card,.edu-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.8rem}
+  .card,.edu-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+  .card{overflow:hidden}
+  .card-body{padding:1.8rem}
+  .card-photo{width:100%;padding-top:100%;background:#4d4d4d;background-size:cover;background-position:center;display:block}
+  .edu-card{padding:1.8rem}
   .card h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:1.2rem}
   .row{display:grid;grid-template-columns:132px 1fr;gap:10px;margin-bottom:.8rem;font-size:14px;align-items:baseline}
   .row span:first-child{color:var(--faint);font-size:12px;line-height:1.7;text-transform:uppercase;white-space:nowrap}
   .row span:last-child{line-height:1.7}
   .row a{color:inherit;text-decoration:none}
 
-  .side-col{display:flex;flex-direction:column;gap:1.5rem}
-  .photo-placeholder{position:relative;width:100%;padding-top:100%;border-radius:var(--r);
-    background:var(--card);border:1px dashed var(--line);background-size:cover;
-    background-position:center;overflow:hidden;flex-shrink:0}
-  .photo-placeholder span,.proj-tile span{position:absolute;font-size:12px;letter-spacing:.05em;
+  .proj-tile span{position:absolute;font-size:12px;letter-spacing:.05em;
     color:var(--faint);background:rgba(var(--bg-rgb),.55);padding:2px 8px;border-radius:20px}
-  .photo-placeholder span{left:.7rem;bottom:.6rem}
 
   .empty{border:1px dashed var(--line);border-radius:var(--r);padding:3rem;text-align:center;color:var(--faint)}
 
@@ -104,6 +103,8 @@
   .edu-card a{color:var(--accent);text-decoration:none}
   .edu-card a:hover{text-decoration:underline}
   .edu-card .yr{color:var(--accent);font-size:13px;margin-bottom:.5rem}
+  #experience .container,#education .container{height:100%;display:flex;flex-direction:column}
+  .section-center{flex:1;display:flex;align-items:center;justify-content:center;width:100%}
   .edu-card h3{font-size:18px;margin-bottom:.3rem}
   .edu-card p{color:var(--muted);font-size:14px}
 
@@ -125,7 +126,7 @@
   }
   @media print{
     @page{size:A4;margin:16mm}
-    nav,.hero-btns,.empty,#snap-bar,.to-top,.hero-bg,.photo-placeholder,.edu-card .logo{display:none!important}
+    nav,.hero-btns,.empty,#snap-bar,.to-top,.hero-bg,.card-photo,.edu-card .logo{display:none!important}
     html,body{background:#fff;color:#111;background-image:none}
     section{min-height:0!important;display:block!important;padding:0 0 10mm!important}
     .hero{max-width:none;padding:0 0 8mm}
@@ -138,6 +139,7 @@
     .hero p,.about-grid p,.edu-card p,#contact p{color:#333}
     p,.card,.edu-card{page-break-inside:avoid}
     .about-grid,.edu-grid{display:block}
+    #experience .container,#education .container,.section-center{display:block;height:auto}
     .about-grid>div:first-child{margin-bottom:6mm}
     .card,.edu-card{background:#fff;border:1px solid #ccc;margin-bottom:4mm}
     .tag-pill{color:#111!important}
@@ -181,7 +183,7 @@
   <div class="container">
     <h2 class="title">O mně</h2>
     <div class="about-grid">
-      <div>
+      <div class="about-text">
         <p>Jsem absolventem Fakulty stavební VUT v Brně, obor pozemní stavby se specializací na <strong>projektování</strong>. Během studia jsem získal praktické zkušenosti v architektonickém ateliéru a zároveň jsem samostatně a externě realizoval individuální zakázky pro architekty a projektanty.</p>
         <p>Svou profesní budoucnost vidím v projektování pozemních staveb s důrazem na precizní zpracování dokumentace a efektivní využití moderních BIM nástrojů, především <strong>Revitu</strong>. Jsem pečlivý, spolehlivý a mám zájem se dále profesně rozvíjet.</p>
         <div class="skills">
@@ -193,9 +195,9 @@
           <span class="tag-pill"><img src="images/icons/sketchup.svg" alt="">SketchUp</span>
         </div>
       </div>
-      <div class="side-col">
-        <div class="photo-placeholder" style="background-image:url('images/ja-01.jpg')"><span>Foto</span></div>
-        <div class="card">
+      <div class="card">
+        <div class="card-photo" style="background-image:url('images/ja-01.jpg')"></div>
+        <div class="card-body">
           <h3>Kontaktní údaje</h3>
           <div class="row"><span>Email</span><span>vojtech.srba@email.cz</span></div>
           <div class="row"><span>Telefon</span><span>605 150 523</span></div>
@@ -215,6 +217,7 @@
 <section id="experience">
   <div class="container">
     <h2 class="title">Zkušenosti</h2>
+    <div class="section-center">
     <div class="edu-grid">
       <div class="edu-card">
         <p class="yr">Přibližně rok, v průběhu studia</p>
@@ -227,12 +230,14 @@
         <p>Externí spolupráce na individuálních zakázkách pro Ing. Pavla Srbu, zaměřená na zpracování projektové dokumentace pozemních staveb.<br><a href="https://www.srbaprojekt.cz/" target="_blank" rel="noopener">srbaprojekt.cz</a></p>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
 <section id="education" style="background:var(--bg-raise)">
   <div class="container">
     <h2 class="title">Vzdělání</h2>
+    <div class="section-center">
     <div class="edu-grid">
       <div class="edu-card">
         <img class="logo" src="images/vut-fast.svg" alt="Logo FAST VUT v Brně">
@@ -246,6 +251,7 @@
         <h3>Gymnázium Vsetín</h3>
         <p>Všeobecné zaměření, maturita z angličtiny, matematiky a deskriptivní geometrie.</p>
       </div>
+    </div>
     </div>
   </div>
 </section>
