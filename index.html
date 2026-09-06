@@ -95,14 +95,14 @@
     font:inherit;color:inherit;text-align:left;padding:0;scroll-snap-align:start;
     transition:border-color .2s}
   .proj-card:hover,.proj-card:focus-visible{border-color:var(--accent)}
-  .proj-card-photo{width:100%;padding-top:75%;background:#4d4d4d;background-size:cover;background-position:center}
+  .proj-card-photo{width:100%;padding-top:66.67%;background:#4d4d4d;background-size:cover;background-position:center}
   .proj-card-name{padding:.9rem 1rem;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   .proj-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem}
   .proj-modal[hidden]{display:none}
   .proj-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75)}
   .proj-modal-panel{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    max-width:720px;width:100%;max-height:90vh;overflow:auto}
+    max-width:1080px;width:100%;max-height:90vh;overflow:auto}
   .proj-modal-close{position:absolute;top:.8rem;right:.8rem;width:36px;height:36px;border-radius:50%;
     border:1px solid var(--line);background:rgba(var(--bg-rgb),.6);color:var(--ink);font-size:16px;
     line-height:1;cursor:pointer;z-index:2}
@@ -431,43 +431,54 @@
 <script>
 (function(){
   // Each project: id, name (shown under the card + in the modal title), year, programs used
-  // (keys must match images/icons/<key>.svg), a short description, and one or more images for
-  // the modal carousel. Add /remove objects here to change what's shown — no other code to touch.
+  // (keys must match images/icons/<key>.svg), a short description, a "cover" thumbnail used only
+  // on the card, and one or more "images" for the modal carousel. Add/remove objects here to
+  // change what's shown — no other code to touch.
   var PROJECTS = {
     skola: [
       { id:'skola-01', name:'Projekt z předmětu: Nauka o budovách', year:'2023', programs:['revit','lumion'],
         desc:'Projekt zpracovaný v rámci předmětu Nauka o budovách.',
-        images:['images/projects/skola-01-1.jpg','images/projects/skola-01-2.jpg','images/projects/skola-01-3.jpg','images/projects/skola-01-4.jpg'] },
+        cover:'images/projects/skola-01-nahled.jpg',
+        images:['images/projects/skola-01-1.jpg','images/projects/skola-01-2.jpg','images/projects/skola-01-3.jpg','images/projects/skola-01-4.jpg','images/projects/skola-01-5.jpg','images/projects/skola-01-6.jpg','images/projects/skola-01-7.jpg','images/projects/skola-01-8.jpg','images/projects/skola-01-9.jpg','images/projects/skola-01-10.jpg'] },
       { id:'skola-02', name:'Projekt č. 02', year:'2023', programs:['revit'],
         desc:'Stručný popis projektu doplníte zde.',
+        cover:'images/projects/skola-02-nahled.jpg',
         images:['images/projects/skola-02-1.jpg'] },
       { id:'skola-03', name:'Bakalářská práce', year:'2024', programs:['revit','twinmotion'],
         desc:'Stručný popis závěrečné práce doplníte zde.',
+        cover:'images/projects/skola-03-nahled.jpg',
         images:['images/projects/skola-03-1.jpg','images/projects/skola-03-2.jpg'] },
       { id:'skola-04', name:'Diplomová práce', year:'2025', programs:['revit','lumion'],
         desc:'Stručný popis závěrečné práce doplníte zde.',
+        cover:'images/projects/skola-04-nahled.jpg',
         images:['images/projects/skola-04-1.jpg','images/projects/skola-04-2.jpg'] }
     ],
     praxe: [
       { id:'praxe-01', name:'Projekt č. 01', year:'2024', programs:['revit','autocad'],
         desc:'Stručný popis zakázky doplníte zde — rozsah spolupráce, typ dokumentace.',
+        cover:'images/projects/praxe-01-nahled.jpg',
         images:['images/projects/praxe-01-1.jpg'] },
       { id:'praxe-02', name:'Projekt č. 02', year:'2024', programs:['autocad','cadkon'],
         desc:'Stručný popis zakázky doplníte zde.',
+        cover:'images/projects/praxe-02-nahled.jpg',
         images:['images/projects/praxe-02-1.jpg'] },
       { id:'praxe-03', name:'Projekt č. 03', year:'2025', programs:['revit'],
         desc:'Stručný popis zakázky doplníte zde.',
+        cover:'images/projects/praxe-03-nahled.jpg',
         images:['images/projects/praxe-03-1.jpg'] }
     ],
     revit: [
       { id:'revit-01', name:'Ukázka č. 01', year:'2024', programs:['revit'],
         desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
+        cover:'images/projects/revit-01-nahled.jpg',
         images:['images/projects/revit-01-1.jpg'] },
       { id:'revit-02', name:'Ukázka č. 02', year:'2024', programs:['revit'],
         desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
+        cover:'images/projects/revit-02-nahled.jpg',
         images:['images/projects/revit-02-1.jpg'] },
       { id:'revit-03', name:'Ukázka č. 03', year:'2025', programs:['revit'],
         desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
+        cover:'images/projects/revit-03-nahled.jpg',
         images:['images/projects/revit-03-1.jpg'] }
     ]
   };
@@ -491,7 +502,7 @@
       card.className = 'proj-card';
       card.dataset.id = p.id;
       card.innerHTML =
-        '<div class="proj-card-photo" style="background-image:url(\'' + p.images[0] + '\')"></div>' +
+        '<div class="proj-card-photo" style="background-image:url(\'' + p.cover + '\')"></div>' +
         '<div class="proj-card-name">' + p.name + '</div>';
       row.appendChild(card);
     });
