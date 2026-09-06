@@ -78,9 +78,6 @@
   .row span:last-child{line-height:1.7}
   .row a{color:inherit;text-decoration:none}
 
-  .proj-tile span{position:absolute;font-size:12px;letter-spacing:.05em;
-    color:var(--faint);background:rgba(var(--bg-rgb),.55);padding:2px 8px;border-radius:20px}
-
   .empty{border:1px dashed var(--line);border-radius:var(--r);padding:3rem;text-align:center;color:var(--faint)}
 
   .proj-cat{margin-bottom:2.8rem}
@@ -92,10 +89,38 @@
   .proj-scroll{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.6rem;scroll-snap-type:x proximity}
   .proj-scroll::-webkit-scrollbar{height:5px}
   .proj-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
-  .proj-tile{position:relative;flex:0 0 210px;height:150px;border-radius:var(--r);background:var(--card);
-    border:1px dashed var(--line);background-size:cover;background-position:center;
-    scroll-snap-align:start;overflow:hidden}
-  .proj-tile span{left:.6rem;bottom:.5rem}
+
+  .proj-card{flex:0 0 220px;display:flex;flex-direction:column;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;
+    font:inherit;color:inherit;text-align:left;padding:0;scroll-snap-align:start;
+    transition:border-color .2s}
+  .proj-card:hover,.proj-card:focus-visible{border-color:var(--accent)}
+  .proj-card-photo{width:100%;padding-top:75%;background:#4d4d4d;background-size:cover;background-position:center}
+  .proj-card-name{padding:.9rem 1rem;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .proj-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem}
+  .proj-modal[hidden]{display:none}
+  .proj-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75)}
+  .proj-modal-panel{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    max-width:720px;width:100%;max-height:90vh;overflow:auto}
+  .proj-modal-close{position:absolute;top:.8rem;right:.8rem;width:36px;height:36px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(var(--bg-rgb),.6);color:var(--ink);font-size:16px;
+    line-height:1;cursor:pointer;z-index:2}
+  .proj-modal-media{position:relative;width:100%;padding-top:60%;background:#000}
+  .proj-modal-photo{position:absolute;inset:0;background-size:cover;background-position:center}
+  .proj-modal-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;
+    border-radius:50%;border:none;background:rgba(var(--bg-rgb),.55);color:#fff;font-size:20px;
+    line-height:1;cursor:pointer}
+  .proj-modal-nav.prev{left:.8rem}
+  .proj-modal-nav.next{right:.8rem}
+  .proj-modal-dots{position:absolute;bottom:.8rem;left:0;right:0;display:flex;justify-content:center;gap:6px}
+  .proj-modal-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4)}
+  .proj-modal-dots span.active{background:#fff}
+  .proj-modal-info{padding:1.6rem}
+  .proj-modal-title{font-size:1.2rem;margin-bottom:.8rem}
+  .proj-modal-meta{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;margin-bottom:1rem;font-size:14px;color:var(--muted)}
+  .proj-modal-meta strong{color:var(--ink);font-weight:600}
+  .proj-modal-desc{color:var(--muted);font-size:14px;line-height:1.7}
 
   .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
   .edu-card{text-align:center}
@@ -126,7 +151,7 @@
   }
   @media print{
     @page{size:A4;margin:16mm}
-    nav,.hero-btns,.empty,#snap-bar,.to-top,.hero-bg,.card-photo,.edu-card .logo{display:none!important}
+    nav,.hero-btns,.empty,#snap-bar,.to-top,.hero-bg,.card-photo,.edu-card .logo,.proj-modal{display:none!important}
     html,body{background:#fff;color:#111;background-image:none}
     section{min-height:0!important;display:block!important;padding:0 0 10mm!important}
     .hero{max-width:none;padding:0 0 8mm}
@@ -146,8 +171,8 @@
     .cta-email{color:#111}
     .footer-bottom{color:#666}
     .proj-scroll{overflow:visible;flex-wrap:wrap}
-    .proj-tile{background:#fff;border:1px solid #ccc}
-    .proj-tile span{background:#eee;color:#333}
+    .proj-card{background:#fff;border:1px solid #ccc}
+    .proj-card-name{color:#333}
   }
 </style>
 </head>
@@ -262,27 +287,10 @@
 
     <div class="proj-cat">
       <div class="proj-cat-head">
-        <h3>Školní projekty</h3>
-        <p>Návrhy zpracované v rámci studia na FAST VUT.</p>
+        <h3>Projekty ze školy</h3>
+        <p>Ateliérové návrhy a závěrečné práce z FAST VUT.</p>
       </div>
-      <div class="proj-scroll">
-        <div class="proj-tile" style="background-image:url('images/skolni-01.jpg')"><span>č. 01</span></div>
-        <div class="proj-tile" style="background-image:url('images/skolni-02.jpg')"><span>č. 02</span></div>
-        <div class="proj-tile" style="background-image:url('images/skolni-03.jpg')"><span>č. 03</span></div>
-        <div class="proj-tile" style="background-image:url('images/skolni-04.jpg')"><span>č. 04</span></div>
-      </div>
-    </div>
-
-    <div class="proj-cat">
-      <div class="proj-cat-head">
-        <h3>Bakalářská a diplomová práce</h3>
-        <p>Výstupy ze závěrečných prací.</p>
-      </div>
-      <div class="proj-scroll">
-        <div class="proj-tile" style="background-image:url('images/bakalarka-01.jpg')"><span>č. 01</span></div>
-        <div class="proj-tile" style="background-image:url('images/bakalarka-02.jpg')"><span>č. 02</span></div>
-        <div class="proj-tile" style="background-image:url('images/bakalarka-03.jpg')"><span>č. 03</span></div>
-      </div>
+      <div class="proj-scroll" data-cat="skola"></div>
     </div>
 
     <div class="proj-cat">
@@ -290,30 +298,37 @@
         <h3>Projekty z praxe</h3>
         <p>Realizace a dokumentace z profesní praxe.</p>
       </div>
-      <div class="proj-scroll">
-        <div class="proj-tile" style="background-image:url('images/prace-01.jpg')"><span>č. 01</span></div>
-        <div class="proj-tile" style="background-image:url('images/prace-02.jpg')"><span>č. 02</span></div>
-        <div class="proj-tile" style="background-image:url('images/prace-03.jpg')"><span>č. 03</span></div>
-        <div class="proj-tile" style="background-image:url('images/prace-04.jpg')"><span>č. 04</span></div>
-      </div>
+      <div class="proj-scroll" data-cat="praxe"></div>
     </div>
 
     <div class="proj-cat">
       <div class="proj-cat-head">
-        <h3>Revit — rodiny a knihovny</h3>
-        <p>Ukázky vytvořených rodin a BIM komponent.</p>
+        <h3>Ukázky z Revitu</h3>
+        <p>Vytvořené rodiny a BIM komponenty.</p>
       </div>
-      <div class="proj-scroll">
-        <div class="proj-tile" style="background-image:url('images/revit-01.jpg')"><span>č. 01</span></div>
-        <div class="proj-tile" style="background-image:url('images/revit-02.jpg')"><span>č. 02</span></div>
-        <div class="proj-tile" style="background-image:url('images/revit-03.jpg')"><span>č. 03</span></div>
-        <div class="proj-tile" style="background-image:url('images/revit-04.jpg')"><span>č. 04</span></div>
-        <div class="proj-tile" style="background-image:url('images/revit-05.jpg')"><span>č. 05</span></div>
-      </div>
+      <div class="proj-scroll" data-cat="revit"></div>
     </div>
 
   </div>
 </section>
+
+<div id="proj-modal" class="proj-modal" hidden>
+  <div class="proj-modal-backdrop" data-close></div>
+  <div class="proj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="proj-modal-title">
+    <button type="button" class="proj-modal-close" data-close aria-label="Zavřít">✕</button>
+    <div class="proj-modal-media">
+      <button type="button" class="proj-modal-nav prev" aria-label="Předchozí obrázek">‹</button>
+      <div class="proj-modal-photo"></div>
+      <button type="button" class="proj-modal-nav next" aria-label="Další obrázek">›</button>
+      <div class="proj-modal-dots"></div>
+    </div>
+    <div class="proj-modal-info">
+      <h3 class="proj-modal-title" id="proj-modal-title"></h3>
+      <div class="proj-modal-meta"></div>
+      <p class="proj-modal-desc"></p>
+    </div>
+  </div>
+</div>
 
 <section id="contact">
   <div class="container">
@@ -410,6 +425,142 @@
 
   setFill(1);
   window.scrollToTop = function(){ goTo(0); };
+})();
+</script>
+
+<script>
+(function(){
+  // Each project: id, name (shown under the card + in the modal title), year, programs used
+  // (keys must match images/icons/<key>.svg), a short description, and one or more images for
+  // the modal carousel. Add /remove objects here to change what's shown — no other code to touch.
+  var PROJECTS = {
+    skola: [
+      { id:'skola-01', name:'Projekt č. 01', year:'2023', programs:['revit','autocad'],
+        desc:'Stručný popis projektu doplníte zde — zadání, koncept, co bylo cílem návrhu.',
+        images:['images/projekty/skola-01-1.jpg','images/projekty/skola-01-2.jpg'] },
+      { id:'skola-02', name:'Projekt č. 02', year:'2023', programs:['revit'],
+        desc:'Stručný popis projektu doplníte zde.',
+        images:['images/projekty/skola-02-1.jpg'] },
+      { id:'skola-03', name:'Bakalářská práce', year:'2024', programs:['revit','twinmotion'],
+        desc:'Stručný popis závěrečné práce doplníte zde.',
+        images:['images/projekty/skola-03-1.jpg','images/projekty/skola-03-2.jpg'] },
+      { id:'skola-04', name:'Diplomová práce', year:'2025', programs:['revit','lumion'],
+        desc:'Stručný popis závěrečné práce doplníte zde.',
+        images:['images/projekty/skola-04-1.jpg','images/projekty/skola-04-2.jpg'] }
+    ],
+    praxe: [
+      { id:'praxe-01', name:'Projekt č. 01', year:'2024', programs:['revit','autocad'],
+        desc:'Stručný popis zakázky doplníte zde — rozsah spolupráce, typ dokumentace.',
+        images:['images/projekty/praxe-01-1.jpg'] },
+      { id:'praxe-02', name:'Projekt č. 02', year:'2024', programs:['autocad','cadkon'],
+        desc:'Stručný popis zakázky doplníte zde.',
+        images:['images/projekty/praxe-02-1.jpg'] },
+      { id:'praxe-03', name:'Projekt č. 03', year:'2025', programs:['revit'],
+        desc:'Stručný popis zakázky doplníte zde.',
+        images:['images/projekty/praxe-03-1.jpg'] }
+    ],
+    revit: [
+      { id:'revit-01', name:'Ukázka č. 01', year:'2024', programs:['revit'],
+        desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
+        images:['images/projekty/revit-01-1.jpg'] },
+      { id:'revit-02', name:'Ukázka č. 02', year:'2024', programs:['revit'],
+        desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
+        images:['images/projekty/revit-02-1.jpg'] },
+      { id:'revit-03', name:'Ukázka č. 03', year:'2025', programs:['revit'],
+        desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
+        images:['images/projekty/revit-03-1.jpg'] }
+    ]
+  };
+
+  var PROGRAM_META = {
+    revit:{icon:'images/icons/revit.svg',label:'Revit'},
+    autocad:{icon:'images/icons/autocad.svg',label:'AutoCAD'},
+    cadkon:{icon:'images/icons/cadkon.svg',label:'CADkon'},
+    twinmotion:{icon:'images/icons/twinmotion.svg',label:'Twinmotion'},
+    lumion:{icon:'images/icons/lumion.svg',label:'Lumion'},
+    sketchup:{icon:'images/icons/sketchup.svg',label:'SketchUp'}
+  };
+
+  var allProjects = {};
+  document.querySelectorAll('.proj-scroll[data-cat]').forEach(function(row){
+    var cat = row.dataset.cat, items = PROJECTS[cat] || [];
+    items.forEach(function(p){
+      allProjects[p.id] = p;
+      var card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'proj-card';
+      card.dataset.id = p.id;
+      card.innerHTML =
+        '<div class="proj-card-photo" style="background-image:url(\'' + p.images[0] + '\')"></div>' +
+        '<div class="proj-card-name">' + p.name + '</div>';
+      row.appendChild(card);
+    });
+  });
+
+  var modal = document.getElementById('proj-modal');
+  var photoEl = modal.querySelector('.proj-modal-photo');
+  var dotsEl = modal.querySelector('.proj-modal-dots');
+  var titleEl = modal.querySelector('.proj-modal-title');
+  var metaEl = modal.querySelector('.proj-modal-meta');
+  var descEl = modal.querySelector('.proj-modal-desc');
+  var current = null, imgIndex = 0;
+
+  function showImage(i){
+    imgIndex = (i + current.images.length) % current.images.length;
+    photoEl.style.backgroundImage = "url('" + current.images[imgIndex] + "')";
+    dotsEl.querySelectorAll('span').forEach(function(dot, k){
+      dot.classList.toggle('active', k === imgIndex);
+    });
+  }
+
+  function openModal(project){
+    current = project;
+    titleEl.textContent = project.name;
+    descEl.textContent = project.desc;
+    metaEl.innerHTML = '<span><strong>Rok:</strong> ' + project.year + '</span>' +
+      '<span><strong>Programy:</strong> ' + project.programs.map(function(k){
+        return PROGRAM_META[k] ? PROGRAM_META[k].label : k;
+      }).join(', ') + '</span>';
+    dotsEl.innerHTML = project.images.map(function(){ return '<span></span>'; }).join('');
+    dotsEl.style.display = project.images.length > 1 ? 'flex' : 'none';
+    modal.querySelectorAll('.proj-modal-nav').forEach(function(btn){
+      btn.style.display = project.images.length > 1 ? 'flex' : 'none';
+    });
+    showImage(0);
+    modal.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+  }
+
+  function closeModal(){
+    modal.hidden = true;
+    document.documentElement.style.overflow = '';
+  }
+
+  document.querySelectorAll('.proj-card').forEach(function(card){
+    card.addEventListener('click', function(){ openModal(allProjects[card.dataset.id]); });
+  });
+  modal.querySelectorAll('[data-close]').forEach(function(el){
+    el.addEventListener('click', closeModal);
+  });
+  modal.querySelector('.proj-modal-nav.prev').addEventListener('click', function(){ showImage(imgIndex - 1); });
+  modal.querySelector('.proj-modal-nav.next').addEventListener('click', function(){ showImage(imgIndex + 1); });
+  document.addEventListener('keydown', function(e){
+    if(modal.hidden) return;
+    if(e.key === 'Escape') closeModal();
+    else if(e.key === 'ArrowLeft') showImage(imgIndex - 1);
+    else if(e.key === 'ArrowRight') showImage(imgIndex + 1);
+  });
+
+  // basic touch swipe between images
+  var touchX = null;
+  var mediaEl = modal.querySelector('.proj-modal-media');
+  mediaEl.addEventListener('touchstart', function(e){ touchX = e.touches[0].clientX; }, {passive:true});
+  mediaEl.addEventListener('touchend', function(e){
+    if(touchX === null) return;
+    var diff = e.changedTouches[0].clientX - touchX;
+    if(Math.abs(diff) > 40) showImage(imgIndex + (diff < 0 ? 1 : -1));
+    touchX = null;
+  }, {passive:true});
 })();
 </script>
 </body>
