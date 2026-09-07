@@ -54,7 +54,7 @@
   .hero p{color:var(--muted);font-size:18px;max-width:56ch;margin:0 auto 2rem}
   .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
   section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:6rem 0}
-  .container{max-width:1000px;margin:0 auto;padding:0 3rem}
+  .container{width:100%;max-width:1000px;margin:0 auto;padding:0 3rem}
   #about{background:var(--bg-raise)}
   h2.title{font-size:2rem;margin-bottom:2.5rem;text-align:center}
 
@@ -90,7 +90,7 @@
   .proj-scroll::-webkit-scrollbar{height:5px}
   .proj-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 
-  .proj-card{flex:0 0 220px;display:flex;flex-direction:column;background:var(--card);
+  .proj-card{flex:0 0 clamp(210px, calc(100% - 3rem), 570px);display:flex;flex-direction:column;background:var(--card);
     border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;
     font:inherit;color:inherit;text-align:left;padding:0;scroll-snap-align:start;
     transition:border-color .2s}
@@ -158,7 +158,6 @@
     nav{padding:0 1.2rem}.nav-links{display:none}
     .container,.hero{padding-left:1.2rem;padding-right:1.2rem}
     .about-grid,.edu-grid{grid-template-columns:1fr}
-    .proj-card{flex-basis:calc(100% - 2.5rem)}
     .footer-bottom{flex-direction:column;gap:6px}
   }
   @media print{
@@ -425,10 +424,12 @@
     if(animating) return;
     var m = getMetrics(), tops = m.tops, heights = m.heights;
     var y = window.scrollY, i = nearestIndex(tops, y), delta = y - tops[i];
-    // trigger boundary = 1/3 of the height of the page you're scrolling toward
-    var dist = delta >= 0
-      ? heights[Math.min(i + 1, heights.length - 1)] / 3
-      : heights[Math.max(i - 1, 0)] / 3;
+    // trigger boundary = 1/3 of the target page's height, capped to 1/3 of the viewport so
+    // tall sections (e.g. Projekty) never need an unreasonable amount of scrolling to trigger
+    var targetH = delta >= 0
+      ? heights[Math.min(i + 1, heights.length - 1)]
+      : heights[Math.max(i - 1, 0)];
+    var dist = Math.min(targetH, window.innerHeight) / 3;
     setFill(1 - Math.abs(delta) / dist);
     if(touching) return; // finger still down — a touch directly owns scroll position on mobile,
                           // so forcing scrollTo now would just fight the OS and cause jitter/snap-back
