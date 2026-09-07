@@ -86,7 +86,7 @@
     margin-bottom:1rem}
   .proj-cat-head h3{font-size:1.05rem}
   .proj-cat-head p{color:var(--muted);font-size:14px}
-  .proj-scroll{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.6rem;scroll-snap-type:x proximity}
+  .proj-scroll{display:flex;width:0;min-width:100%;gap:1rem;overflow-x:auto;padding-bottom:.6rem;scroll-snap-type:x proximity}
   .proj-scroll::-webkit-scrollbar{height:5px}
   .proj-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 
@@ -146,7 +146,7 @@
 
   #contact{background:var(--bg-raise);text-align:center;padding:5rem 0;border-top:1px solid var(--line)}
   #contact p{color:var(--muted);max-width:44ch;margin:0 auto 2rem}
-  .cta-email{font-size:1.8rem;color:var(--accent);text-decoration:none;border-bottom:2px solid var(--accent-mid)}
+  .cta-email{font-size:1.8rem;color:var(--accent);text-decoration:none;border-bottom:2px solid var(--accent-mid);overflow-wrap:anywhere}
   .footer-bottom{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;
     justify-content:center;gap:2.5rem;flex-wrap:wrap;color:var(--faint);font-size:13px}
   .to-top{display:inline-flex;align-items:center;justify-content:center;width:55px;height:55px;
@@ -158,6 +158,7 @@
     nav{padding:0 1.2rem}.nav-links{display:none}
     .container,.hero{padding-left:1.2rem;padding-right:1.2rem}
     .about-grid,.edu-grid{grid-template-columns:1fr}
+    .proj-card{flex-basis:calc(100% - 2.5rem)}
     .footer-bottom{flex-direction:column;gap:6px}
   }
   @media print{
