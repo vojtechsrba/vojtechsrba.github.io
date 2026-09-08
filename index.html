@@ -383,7 +383,7 @@
   var sectionEls = document.querySelectorAll('section');
   var fill = document.getElementById('snap-fill');
   var html = document.documentElement;
-  var animating = false, touching = false;
+  var animating = false, touching = false, mouseHeld = false;
 
   function ease(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3) / 2; }
   function setFill(v){ fill.style.width = (Math.max(0, Math.min(1, v)) * 100) + '%'; }
@@ -433,8 +433,9 @@
       : heights[Math.max(i - 1, 0)];
     var dist = Math.min(targetH, window.innerHeight) / 3;
     setFill(1 - Math.abs(delta) / dist);
-    if(touching) return; // finger still down — a touch directly owns scroll position on mobile,
-                          // so forcing scrollTo now would just fight the OS and cause jitter/snap-back
+    if(touching || mouseHeld) return; // finger still down (touch), or mouse button still held (e.g.
+                          // dragging the scrollbar) — in both cases something else directly owns
+                          // scroll position right now, so forcing scrollTo would just fight it
     if(delta >= dist && i < tops.length - 1) goTo(tops[i + 1]);
     else if(delta <= -dist && i > 0) goTo(tops[i - 1]);
   }
@@ -442,6 +443,8 @@
   window.addEventListener('touchstart', function(){ touching = true; }, {passive:true});
   window.addEventListener('touchend', function(){ touching = false; checkSnap(); }, {passive:true});
   window.addEventListener('touchcancel', function(){ touching = false; }, {passive:true});
+  window.addEventListener('mousedown', function(){ mouseHeld = true; }, {passive:true});
+  window.addEventListener('mouseup', function(){ mouseHeld = false; checkSnap(); }, {passive:true});
   window.addEventListener('scroll', checkSnap, {passive:true});
 
   setFill(1);
