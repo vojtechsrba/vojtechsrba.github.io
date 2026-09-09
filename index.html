@@ -475,55 +475,41 @@
 <script>
 (function(){
   // Each project: id, name (shown under the card + in the modal title), year, programs used
-  // (keys must match images/icons/<key>.svg), a short description, a "cover" thumbnail used only
-  // on the card, and one or more "images" for the modal carousel. Add/remove objects here to
-  // change what's shown — no other code to touch.
+  // (keys must match images/icons/<key>.svg) and a short description. Add/remove objects here
+  // to add/remove a whole card — order in the array = order in the row.
+  //
+  // Photos are NOT listed here — they're found automatically from filenames in
+  // images/projects/ following the pattern <id>-nahled.jpg (card thumbnail) and
+  // <id>-01.jpg, <id>-02.jpg, <id>-03.jpg… (photos shown inside the opened card, in that
+  // order). To add/remove/reorder photos on an existing card, just add/remove/rename the
+  // image files — nothing here needs to change. Numbers must be sequential with no gaps
+  // (…-01, -02, -03…), zero-padded to two digits.
   var PROJECTS = {
     skola: [
       { id:'skola-01', name:'Projekt z předmětu: Nauka o budovách', year:'2023', programs:['revit','lumion'],
-        desc:'Projekt zpracovaný v rámci předmětu Nauka o budovách.',
-        cover:'images/projects/skola-01-nahled.jpg',
-        images:['images/projects/skola-01-1.jpg','images/projects/skola-01-2.jpg','images/projects/skola-01-3.jpg','images/projects/skola-01-4.jpg','images/projects/skola-01-5.jpg','images/projects/skola-01-6.jpg','images/projects/skola-01-7.jpg','images/projects/skola-01-8.jpg','images/projects/skola-01-9.jpg','images/projects/skola-01-10.jpg'] },
+        desc:'Projekt zpracovaný v rámci předmětu Nauka o budovách.' },
       { id:'skola-02', name:'Projekt č. 02', year:'2023', programs:['revit'],
-        desc:'Stručný popis projektu doplníte zde.',
-        cover:'images/projects/skola-02-nahled.jpg',
-        images:['images/projects/skola-02-1.jpg'] },
+        desc:'Stručný popis projektu doplníte zde.' },
       { id:'skola-03', name:'Bakalářská práce', year:'2024', programs:['revit','twinmotion'],
-        desc:'Stručný popis závěrečné práce doplníte zde.',
-        cover:'images/projects/skola-03-nahled.jpg',
-        images:['images/projects/skola-03-1.jpg','images/projects/skola-03-2.jpg'] },
+        desc:'Stručný popis závěrečné práce doplníte zde.' },
       { id:'skola-04', name:'Diplomová práce', year:'2025', programs:['revit','lumion'],
-        desc:'Stručný popis závěrečné práce doplníte zde.',
-        cover:'images/projects/skola-04-nahled.jpg',
-        images:['images/projects/skola-04-1.jpg','images/projects/skola-04-2.jpg'] }
+        desc:'Stručný popis závěrečné práce doplníte zde.' }
     ],
     praxe: [
       { id:'praxe-01', name:'Projekt č. 01', year:'2024', programs:['revit','autocad'],
-        desc:'Stručný popis zakázky doplníte zde — rozsah spolupráce, typ dokumentace.',
-        cover:'images/projects/praxe-01-nahled.jpg',
-        images:['images/projects/praxe-01-1.jpg'] },
+        desc:'Stručný popis zakázky doplníte zde — rozsah spolupráce, typ dokumentace.' },
       { id:'praxe-02', name:'Projekt č. 02', year:'2024', programs:['autocad','cadkon'],
-        desc:'Stručný popis zakázky doplníte zde.',
-        cover:'images/projects/praxe-02-nahled.jpg',
-        images:['images/projects/praxe-02-1.jpg'] },
+        desc:'Stručný popis zakázky doplníte zde.' },
       { id:'praxe-03', name:'Projekt č. 03', year:'2025', programs:['revit'],
-        desc:'Stručný popis zakázky doplníte zde.',
-        cover:'images/projects/praxe-03-nahled.jpg',
-        images:['images/projects/praxe-03-1.jpg'] }
+        desc:'Stručný popis zakázky doplníte zde.' }
     ],
     revit: [
-      { id:'revit-01', name:'Ukázka č. 01', year:'2024', programs:['revit'],
-        desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
-        cover:'images/projects/revit-01-nahled.jpg',
-        images:['images/projects/revit-01-1.jpg'] },
+      { id:'revit-01', name:'Rodina - Dveře', year:'2026', programs:['revit'],
+        desc:'Samostatně vytvořená modifikovatelná rodina dveří.' },
       { id:'revit-02', name:'Ukázka č. 02', year:'2024', programs:['revit'],
-        desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
-        cover:'images/projects/revit-02-nahled.jpg',
-        images:['images/projects/revit-02-1.jpg'] },
+        desc:'Popis rodiny nebo BIM komponenty doplníte zde.' },
       { id:'revit-03', name:'Ukázka č. 03', year:'2025', programs:['revit'],
-        desc:'Popis rodiny nebo BIM komponenty doplníte zde.',
-        cover:'images/projects/revit-03-nahled.jpg',
-        images:['images/projects/revit-03-1.jpg'] }
+        desc:'Popis rodiny nebo BIM komponenty doplníte zde.' }
     ]
   };
 
@@ -536,11 +522,56 @@
     sketchup:{icon:'images/icons/sketchup.svg',label:'SketchUp'}
   };
 
+  // --- automatické hledání fotek -------------------------------------------------
+  // Prohlížeč neumí vypsat obsah složky, takže místo toho zkusíme načíst očekávaný
+  // název souboru a podle výsledku (onload = existuje, onerror = neexistuje) poznáme,
+  // jestli tam daná fotka je.
+  function pad2(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function probeImage(src){
+    return new Promise(function(resolve){
+      var img = new Image();
+      img.onload = function(){ resolve(true); };
+      img.onerror = function(){ resolve(false); };
+      img.src = src;
+    });
+  }
+
+  // Najde souvislou řadu <id>-01.jpg, <id>-02.jpg… a zastaví se na první chybějící
+  // (mezery v číslování tedy nejsou podporované — čísla musí jít za sebou).
+  function probeGallery(id, maxCount){
+    maxCount = maxCount || 40;
+    var checks = [];
+    for(var i = 1; i <= maxCount; i++){
+      checks.push(probeImage('images/projects/' + id + '-' + pad2(i) + '.jpg'));
+    }
+    return Promise.all(checks).then(function(results){
+      var paths = [];
+      for(var i = 0; i < results.length; i++){
+        if(!results[i]) break;
+        paths.push('images/projects/' + id + '-' + pad2(i + 1) + '.jpg');
+      }
+      return paths;
+    });
+  }
+
+  // Zajistí seznam fotek pro daný projekt, probíhá jen jednou i při vícenásobném volání.
+  function ensureImages(p){
+    if(p.images) return Promise.resolve(p.images);
+    if(!p._imagesPromise){
+      p._imagesPromise = probeGallery(p.id).then(function(paths){ p.images = paths; return paths; });
+    }
+    return p._imagesPromise;
+  }
+  // ---------------------------------------------------------------------------------
+
   var allProjects = {};
   document.querySelectorAll('.proj-scroll[data-cat]').forEach(function(row){
     var cat = row.dataset.cat, items = PROJECTS[cat] || [];
     items.forEach(function(p){
       allProjects[p.id] = p;
+      p.cover = 'images/projects/' + p.id + '-nahled.jpg';
+
       var card = document.createElement('button');
       card.type = 'button';
       card.className = 'proj-card';
@@ -549,6 +580,8 @@
         '<div class="proj-card-photo" style="background-image:url(\'' + p.cover + '\')"></div>' +
         '<div class="proj-card-name">' + p.name + '</div>';
       row.appendChild(card);
+
+      ensureImages(p); // začne stahovat seznam fotek na pozadí hned
     });
   });
 
@@ -594,7 +627,10 @@
   }
 
   document.querySelectorAll('.proj-card').forEach(function(card){
-    card.addEventListener('click', function(){ openModal(allProjects[card.dataset.id]); });
+    card.addEventListener('click', function(){
+      var p = allProjects[card.dataset.id];
+      ensureImages(p).then(function(){ openModal(p); });
+    });
   });
   modal.querySelectorAll('[data-close]').forEach(function(el){
     el.addEventListener('click', closeModal);
