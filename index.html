@@ -525,7 +525,9 @@
   // --- automatické hledání fotek -------------------------------------------------
   // Prohlížeč neumí vypsat obsah složky, takže místo toho zkusíme načíst očekávaný
   // název souboru a podle výsledku (onload = existuje, onerror = neexistuje) poznáme,
-  // jestli tam daná fotka je.
+  // jestli tam daná fotka je. Zkouší se postupně víc přípon, takže je jedno, jestli
+  // fotku uložíš jako .jpg, .png, .jpeg nebo .webp.
+  var EXTS = ['jpg', 'jpeg', 'png', 'webp'];
   function pad2(n){ return n < 10 ? '0' + n : '' + n; }
 
   function probeImage(src){
@@ -537,29 +539,41 @@
     });
   }
 
-  // Najde souvislou řadu <id>-01.jpg, <id>-02.jpg… a zastaví se na první chybějící
+  // Najde soubor se zadaným základem názvu (bez přípony) mezi podporovanými příponami.
+  // Vrátí buď plnou cestu k souboru, nebo null, pokud žádná přípona neexistuje.
+  function findFile(base){
+    function tryExt(i){
+      if(i >= EXTS.length) return Promise.resolve(null);
+      var src = base + '.' + EXTS[i];
+      return probeImage(src).then(function(ok){
+        return ok ? src : tryExt(i + 1);
+      });
+    }
+    return tryExt(0);
+  }
+
+  // Najde souvislou řadu <id>-01.*, <id>-02.*… a zastaví se na první chybějící
   // (mezery v číslování tedy nejsou podporované — čísla musí jít za sebou).
   function probeGallery(id, maxCount){
     maxCount = maxCount || 40;
-    var checks = [];
-    for(var i = 1; i <= maxCount; i++){
-      checks.push(probeImage('images/projects/' + id + '-' + pad2(i) + '.jpg'));
+    function step(i, found){
+      if(i > maxCount) return Promise.resolve(found);
+      return findFile('images/projects/' + id + '-' + pad2(i)).then(function(src){
+        if(!src) return found;
+        return step(i + 1, found.concat([src]));
+      });
     }
-    return Promise.all(checks).then(function(results){
-      var paths = [];
-      for(var i = 0; i < results.length; i++){
-        if(!results[i]) break;
-        paths.push('images/projects/' + id + '-' + pad2(i + 1) + '.jpg');
-      }
-      return paths;
-    });
+    return step(1, []);
   }
 
   // Zajistí seznam fotek pro daný projekt, probíhá jen jednou i při vícenásobném volání.
   function ensureImages(p){
     if(p.images) return Promise.resolve(p.images);
     if(!p._imagesPromise){
-      p._imagesPromise = probeGallery(p.id).then(function(paths){ p.images = paths; return paths; });
+      p._imagesPromise = probeGallery(p.id).then(function(paths){
+        p.images = paths.length ? paths : (p.cover ? [p.cover] : []);
+        return p.images;
+      });
     }
     return p._imagesPromise;
   }
@@ -570,16 +584,20 @@
     var cat = row.dataset.cat, items = PROJECTS[cat] || [];
     items.forEach(function(p){
       allProjects[p.id] = p;
-      p.cover = 'images/projects/' + p.id + '-nahled.jpg';
 
       var card = document.createElement('button');
       card.type = 'button';
       card.className = 'proj-card';
       card.dataset.id = p.id;
       card.innerHTML =
-        '<div class="proj-card-photo" style="background-image:url(\'' + p.cover + '\')"></div>' +
+        '<div class="proj-card-photo"></div>' +
         '<div class="proj-card-name">' + p.name + '</div>';
       row.appendChild(card);
+
+      findFile('images/projects/' + p.id + '-nahled').then(function(src){
+        p.cover = src; // může zůstat null, pokud náhled zatím není nahraný
+        if(src) card.querySelector('.proj-card-photo').style.backgroundImage = "url('" + src + "')";
+      });
 
       ensureImages(p); // začne stahovat seznam fotek na pozadí hned
     });
