@@ -18,7 +18,7 @@
     --concrete:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth;scroll-padding-top:60px}
+  html{scroll-padding-top:60px}
   body{font-family:'Sansation',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;
     background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
     background-size:36px 36px}
@@ -80,12 +80,14 @@
 
   .empty{border:1px dashed var(--line);border-radius:var(--r);padding:3rem;text-align:center;color:var(--faint)}
 
-  .proj-cat{margin-bottom:2.8rem}
+  .proj-cat{margin-bottom:1.5rem}
   .proj-cat:last-child{margin-bottom:0}
   .proj-cat-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.3rem;
-    margin-bottom:1rem}
+    margin-bottom:.6rem}
   .proj-cat-head h3{font-size:1.05rem}
   .proj-cat-head p{color:var(--muted);font-size:14px}
+  #projects{padding:3rem 0}
+  #projects h2.title{margin-bottom:1.5rem}
   #projects .container{max-width:none;padding:0 clamp(1.25rem,4.5vw,6rem)}
   .proj-scroll{display:flex;width:0;min-width:100%;gap:1rem;overflow-x:auto;padding-bottom:.6rem;
     scroll-snap-type:x proximity;justify-content:safe center}
@@ -99,13 +101,16 @@
   .proj-card:hover,.proj-card:focus-visible{border-color:var(--accent)}
   .proj-card-photo{width:100%;padding-top:66.67%;background:#4d4d4d;background-size:cover;background-position:center}
   .proj-card-name{padding:.9rem 1rem;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media(min-width:801px){
+    .proj-card{flex-basis:190px}
+  }
 
   .proj-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
     gap:1.2rem;padding:2rem;max-width:100vw;overflow-x:hidden}
   .proj-modal[hidden]{display:none}
   .proj-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:0}
   .proj-modal-panel{position:relative;z-index:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    max-width:1080px;width:100%;max-height:90vh;overflow:auto}
+    max-width:min(1620px, 95vw);width:100%;max-height:90vh;overflow:auto}
   .proj-modal-close{position:absolute;top:.8rem;right:.8rem;width:48px;height:48px;border-radius:50%;
     display:inline-flex;align-items:center;justify-content:center;
     border:1px solid var(--accent-mid);background:rgba(var(--bg-rgb),.55);color:var(--accent);
@@ -372,6 +377,21 @@
   // je to spolehlivější než se snažit ošetřit všechny varianty dotykového chování.
   var isMouseDevice = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   var snapBar = document.getElementById('snap-bar');
+
+  // Odkazy typu #projects, #contact… necháme skočit vlastní animací (goTo), místo aby to dělal
+  // nativní CSS scroll-behavior:smooth — ten by běžel souběžně s naším JS snapem a ty dvě
+  // animace by si navzájem "přetahovaly" scroll pozici (proto to sekalo/zasekávalo se).
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if(!a || a.hasAttribute('onclick')) return; // "Stáhnout CV" a "Nahoru" si scroll řeší samy
+    var hash = a.getAttribute('href');
+    var target = hash && hash.length > 1 ? document.querySelector(hash) : null;
+    if(!target) return;
+    e.preventDefault();
+    var top = target.offsetTop - 60;
+    if(isMouseDevice) goTo(top); else window.scrollTo({ top: top, behavior: 'smooth' });
+  });
+
   if(!isMouseDevice){
     if(snapBar) snapBar.style.display = 'none';
     window.scrollToTop = function(){
