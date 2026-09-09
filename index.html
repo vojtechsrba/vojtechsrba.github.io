@@ -131,6 +131,8 @@
   .proj-modal-title{font-size:1.2rem;margin-bottom:.8rem}
   .proj-modal-meta{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;margin-bottom:1rem;font-size:14px;color:var(--muted)}
   .proj-modal-meta strong{color:var(--ink);font-weight:600}
+  .proj-modal-meta a{color:var(--accent);text-decoration:underline}
+  .proj-modal-meta a:hover{color:color-mix(in srgb,var(--accent) 50%,#fff 50%)}
   .proj-modal-desc{color:var(--muted);font-size:14px;line-height:1.7}
   @media(max-width:900px){
     .proj-modal{gap:.4rem;padding:.6rem}
@@ -488,12 +490,14 @@
     skola: [
       { id:'skola-01', name:'Projekt z předmětu: Nauka o budovách', year:'2023', programs:['revit','lumion'],
         desc:'Projekt zpracovaný v rámci předmětu Nauka o budovách.' },
-      { id:'skola-02', name:'Projekt č. 02', year:'2023', programs:['revit'],
-        desc:'Stručný popis projektu doplníte zde.' },
-      { id:'skola-03', name:'Bakalářská práce', year:'2024', programs:['revit','twinmotion'],
-        desc:'Stručný popis závěrečné práce doplníte zde.' },
-      { id:'skola-04', name:'Diplomová práce', year:'2025', programs:['revit','lumion'],
-        desc:'Stručný popis závěrečné práce doplníte zde.' }
+      { id:'skola-02', name:'Bakalářská práce - Bytový dům', year:'2024', programs:['autocad','cadkon','revit','lumion'],
+        grade:'B', link:'https://www.vut.cz/studenti/zav-prace/detail/158440',
+        desc:'Bakalářská práce zpracovaná v rámci studia na FAST VUT.' },
+      { id:'skola-03', name:'Diplomová práce - Ateliér s kavárnou, Malenovice', year:'2026', programs:['autocad','cadkon','revit','twinmotion'],
+        grade:'A', link:'https://www.vut.cz/studenti/zav-prace/detail/169217',
+        desc:'Diplomová práce zpracovaná v rámci studia na FAST VUT.' },
+      { id:'skola-04', name:'Projekt č. 04', year:'2025', programs:['revit'],
+        desc:'Stručný popis projektu doplníte zde.' }
     ],
     praxe: [
       { id:'praxe-01', name:'Projekt č. 01', year:'2024', programs:['revit','autocad'],
@@ -628,10 +632,17 @@
     current = project;
     titleEl.textContent = project.name;
     descEl.textContent = project.desc;
-    metaEl.innerHTML = '<span><strong>Rok:</strong> ' + project.year + '</span>' +
+    var meta = '<span><strong>Rok:</strong> ' + project.year + '</span>' +
       '<span><strong>Programy:</strong> ' + project.programs.map(function(k){
         return PROGRAM_META[k] ? PROGRAM_META[k].label : k;
       }).join(', ') + '</span>';
+    if(project.grade){
+      meta += '<span><strong>Klasifikace:</strong> ' + project.grade + '</span>';
+    }
+    if(project.link){
+      meta += '<span><a href="' + project.link + '" target="_blank" rel="noopener noreferrer">Odkaz na práci</a></span>';
+    }
+    metaEl.innerHTML = meta;
     dotsEl.innerHTML = project.images.map(function(){ return '<span></span>'; }).join('');
     dotsEl.style.display = project.images.length > 1 ? 'flex' : 'none';
     showImage(0);
