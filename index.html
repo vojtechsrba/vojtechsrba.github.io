@@ -110,7 +110,15 @@
   .proj-modal[hidden]{display:none}
   .proj-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:0}
   .proj-modal-panel{position:relative;z-index:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    max-width:min(1620px, 95vw);width:100%;max-height:90vh;overflow:auto}
+    /* Šířka je omezená třemi věcmi zároveň (prohlížeč vybere tu nejmenší):
+       1) 1920px – náš pevný horní strop
+       2) 95vw – ať se vejde na šířku i na malých displejích
+       3) dopočet z výšky – fotka má poměr 16:9 (56.25% šířky), pod ní je
+          textový blok (počítáme s ~200px rezervy), takže šířka nikdy nesmí
+          být taková, aby to spolu přesáhlo 90vh. Tím karta při nízkém okně
+          prohlížeče radši zmenší celou sebe, než aby uvnitř scrollovala. */
+    max-width:min(1920px, 95vw, calc((90vh - 200px) / 0.5625));
+    width:100%;max-height:90vh;overflow:auto}
   .proj-modal-close{position:absolute;top:.8rem;right:.8rem;width:48px;height:48px;border-radius:50%;
     display:inline-flex;align-items:center;justify-content:center;
     border:1px solid var(--accent-mid);background:rgba(var(--bg-rgb),.55);color:var(--accent);
@@ -124,6 +132,12 @@
     cursor:pointer;transition:background .2s,transform .2s}
   .proj-modal-nav:hover{background:var(--accent-dim)}
   .proj-modal-nav svg{width:20px;height:20px;display:block}
+  .proj-modal-fullsize{position:absolute;top:.8rem;left:.8rem;width:48px;height:48px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    border:1px solid var(--accent-mid);background:rgba(var(--bg-rgb),.55);color:var(--accent);
+    text-decoration:none;z-index:2;transition:background .2s}
+  .proj-modal-fullsize:hover{background:var(--accent-dim)}
+  .proj-modal-fullsize svg{width:20px;height:20px;display:block}
   .proj-modal-dots{position:absolute;bottom:.8rem;left:0;right:0;display:flex;justify-content:center;gap:6px}
   .proj-modal-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4)}
   .proj-modal-dots span.active{background:#fff}
@@ -140,6 +154,8 @@
     .proj-modal-nav svg{width:16px;height:16px}
     .proj-modal-close{width:38px;height:38px}
     .proj-modal-close svg{width:16px;height:16px}
+    .proj-modal-fullsize{width:38px;height:38px}
+    .proj-modal-fullsize svg{width:16px;height:16px}
   }
 
   .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
@@ -342,6 +358,9 @@
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>
     </button>
     <div class="proj-modal-media">
+      <a class="proj-modal-fullsize" target="_blank" rel="noopener noreferrer" aria-label="Otevřít v plné velikosti na nové kartě" title="Otevřít v plné velikosti">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H4v4M12 16h4v-4M4 4l6 6M16 16l-6-6"/></svg>
+      </a>
       <div class="proj-modal-photo"></div>
       <div class="proj-modal-dots"></div>
     </div>
@@ -607,6 +626,7 @@
 
   var modal = document.getElementById('proj-modal');
   var photoEl = modal.querySelector('.proj-modal-photo');
+  var fullsizeEl = modal.querySelector('.proj-modal-fullsize');
   var dotsEl = modal.querySelector('.proj-modal-dots');
   var titleEl = modal.querySelector('.proj-modal-title');
   var metaEl = modal.querySelector('.proj-modal-meta');
@@ -618,6 +638,7 @@
   function showImage(i){
     imgIndex = Math.max(0, Math.min(current.images.length - 1, i));
     photoEl.style.backgroundImage = "url('" + current.images[imgIndex] + "')";
+    fullsizeEl.href = current.images[imgIndex];
     dotsEl.querySelectorAll('span').forEach(function(dot, k){
       dot.classList.toggle('active', k === imgIndex);
     });
