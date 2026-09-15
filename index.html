@@ -148,6 +148,10 @@
   .proj-modal-meta a{color:var(--accent);text-decoration:underline}
   .proj-modal-meta a:hover{color:color-mix(in srgb,var(--accent) 50%,#fff 50%)}
   .proj-modal-desc{color:var(--muted);font-size:14px;line-height:1.7}
+  .proj-modal-desc ul{margin:0;padding-left:1.1rem}
+  .proj-modal-desc li{margin-bottom:.5rem}
+  .proj-modal-desc li:last-child{margin-bottom:0}
+  .proj-modal-desc strong{color:var(--ink)}
   @media(max-width:900px){
     .proj-modal{gap:.4rem;padding:.6rem}
     .proj-modal-nav{width:38px;height:38px}
@@ -187,7 +191,7 @@
   }
   @media print{
     @page{size:A4;margin:16mm}
-    nav,.hero-btns,.empty,#snap-bar,.to-top,.hero-bg,.card-photo,.edu-card .logo,.proj-modal{display:none!important}
+    nav,.hero-btns,.empty,#snap-bar,.to-top,.hero-bg,.card-photo,.edu-card .logo,.proj-modal,#projects{display:none!important}
     html,body{background:#fff;color:#111;background-image:none}
     section{min-height:0!important;display:block!important;padding:0 0 10mm!important}
     .hero{max-width:none;padding:0 0 8mm}
@@ -339,7 +343,7 @@
     <div class="proj-cat">
       <div class="proj-cat-head">
         <h3>Ukázky z Revitu</h3>
-        <p>Vytvořené rodiny a BIM komponenty.</p>
+        <p>Samostatně vytvořené rodiny.</p>
       </div>
       <div class="proj-scroll" data-cat="revit"></div>
     </div>
@@ -366,7 +370,7 @@
     <div class="proj-modal-info">
       <h3 class="proj-modal-title" id="proj-modal-title"></h3>
       <div class="proj-modal-meta"></div>
-      <p class="proj-modal-desc"></p>
+      <div class="proj-modal-desc"></div>
     </div>
   </div>
   <button type="button" class="proj-modal-nav next" aria-label="Další obrázek">
@@ -516,22 +520,50 @@
         desc:'Diplomová práce zpracovaná v rámci studia na FAST VUT.' }
     ],
     praxe: [
-      { id:'praxe-01', name:'Kulturní dům Valašská Polanka', year:'2024', programs:['revit','autocad'],
-        desc:'Stručný popis zakázky doplníte zde — rozsah spolupráce, typ dokumentace.' },
-      { id:'praxe-02', name:'Rodinné domy u Luhačovic', year:'2024', programs:['autocad','cadkon'],
-        desc:'Stručný popis zakázky doplníte zde.' }
+      { id:'praxe-01', name:'Kulturní dům Valašská Polanka', year:'2026', programs:['revit','twinmotion'],
+        desc:'Vizualizace v rámci studie rekonstrukce kulturního domu ve Valašské Polance.' },
+      { id:'praxe-02', name:'Rodinné domy u Luhačovic', year:'2026', programs:['revit','twinmotion'],
+        desc:'Vizualizace dvou novostaveb rodinných domů.' }
     ],
     revit: [
-      { id:'revit-01', name:'Jednokřídlé dveře', year:'2026', programs:['revit'],
-        desc:'Samostatně vytvořená modifikovatelná rodina dveří.' },
-      { id:'revit-02', name:'Dvoukřídlé dveře', year:'2024', programs:['revit'],
-        desc:'Popis rodiny nebo BIM komponenty doplníte zde.' },
-      { id:'revit-03', name:'Okna - více variant', year:'2025', programs:['revit'],
-        desc:'Popis rodiny nebo BIM komponenty doplníte zde.' },
-      { id:'revit-04', name:'Rohové okno', year:'2025', programs:['revit'],
-        desc:'Popis rodiny nebo BIM komponenty doplníte zde.' },
-      { id:'revit-05', name:'Oplechování atiky', year:'2025', programs:['revit'],
-        desc:'Popis rodiny nebo BIM komponenty doplníte zde.' }
+      { id:'revit-01', name:'Jednokřídlé dveře', year:'2025', programs:['revit'],
+        desc:'<ul>'+
+          '<li><strong>Rozměry:</strong> Vedle základních rozměrů i parametrické rozměry panelu, zárubně, obložky a rámu. Nastavitelná výška kování a madla.</li>'+
+          '<li><strong>Variabilita:</strong> Volitelný typ panelu, zárubně, kování i madla s možností snadné budoucí tvorby vlastních typů.</li>'+
+          '<li><strong>Vykazování:</strong> Integrované parametry pro rozměry stavebního i světlého otvoru (pro kótování a výkazy).</li>'+
+          '<li><strong>Grafika a materiály:</strong> Individuální nastavení materiálů pro všechny komponenty, optimalizované 2D/3D zobrazení (půdorysy, pohledy, řezy).</li>'+
+        '</ul>' },
+      { id:'revit-02', name:'Dvoukřídlé dveře', year:'2025', programs:['revit'],
+        desc:'<ul>'+
+          '<li><strong>Rozměry:</strong> Vedle základních rozměrů i parametrické rozměry obou panelů, zárubně, obložky a rámu. Nastavitelná výška kování a madla.</li>'+
+          '<li><strong>Variabilita:</strong> Volitelný typ obou panelů (nezávisle na sobě), zárubně, kování i madla s možností snadné budoucí tvorby vlastních typů.</li>'+
+          '<li><strong>Vykazování:</strong> Integrované parametry pro rozměry stavebního i světlého otvoru (pro kótování a výkazy).</li>'+
+          '<li><strong>Grafika a materiály:</strong> Individuální nastavení materiálů pro všechny komponenty, optimalizované 2D/3D zobrazení (půdorysy, pohledy, řezy).</li>'+
+        '</ul>' },
+      { id:'revit-03', name:'Okna - více variant', year:'2026', programs:['revit'],
+        desc:'<ul>'+
+          '<li><strong>Typy a varianty:</strong> Fixní, fixní se sloupkem, dělená (křídlo/fix vedle sebe i nad sebou), bezbariérové křídlo.</li>'+
+          '<li><strong>Funkcionalita:</strong> Automatické vyříznutí otvoru napříč více vrstvami/samostatnými stěnami. Vypínatelná viditelnost kování a parapetů.</li>'+
+          '<li><strong>Rozměry:</strong> Nastavitelné rozměry rámu, křídla a výšky kování.</li>'+
+          '<li><strong>Vykazování:</strong> Integrované parametry pro rozměry stavebního i světlého otvoru (pro kótování a výkazy).</li>'+
+          '<li><strong>Grafika a materiály:</strong> Individuální nastavení materiálů pro všechny komponenty, optimalizované 2D/3D zobrazení (půdorysy, pohledy, řezy).</li>'+
+          '<li><strong>Vnější parapet:</strong> Samostatná sdílená rodina s nastavením sklonu, přesahu, rozměrů a úhlů. Obsahuje výkazové parametry (délka, rozvinutá šířka) pro klempířské výpisy.</li>'+
+        '</ul>' },
+      { id:'revit-04', name:'Rohové okno', year:'2026', programs:['revit'],
+        desc:'<ul>'+
+          '<li><strong>Funkcionalita:</strong> Plně parametrické rohové okno s automatickým vyříznutím více samostatných stěn.</li>'+
+          '<li><strong>Rozměry:</strong> Nastavitelné rozměry rámu.</li>'+
+          '<li><strong>Vykazování:</strong> Integrované parametry pro rozměry stavebního otvoru (pro kótování a výkazy).</li>'+
+          '<li><strong>Grafika a materiály:</strong> Individuální nastavení materiálů pro všechny komponenty, optimalizované 2D/3D zobrazení (půdorysy, pohledy, řezy).</li>'+
+          '<li><strong>Vnější parapet:</strong> Samostatná sdílená rodina s nastavením sklonu, přesahu, rozměrů a úhlů. Obsahuje výkazové parametry (délka, rozvinutá šířka) pro klempířské výpisy.</li>'+
+        '</ul>' },
+      { id:'revit-05', name:'Oplechování atiky', year:'2026', programs:['revit'],
+        desc:'<ul>'+
+          '<li><strong>Zakončení:</strong> Nezávislé nastavení obou konců – rohové, koutové, se zahnutím nebo bez zahnutí.</li>'+
+          '<li><strong>Adaptabilita:</strong> Automatické přizpůsobení při navázání stěn v rohu s odlišnou tloušťkou.</li>'+
+          '<li><strong>Geometrie a materiály:</strong> Kompletní kontrola rozměrů, sklonu, přesahů, úhlů a materiálu.</li>'+
+          '<li><strong>Vykazování:</strong> Obsahuje výkazové parametry (délka, rozvinutá šířka) pro klempířské výpisy.</li>'+
+        '</ul>' }
     ]
   };
 
@@ -620,8 +652,6 @@
         p.cover = src; // může zůstat null, pokud náhled zatím není nahraný
         if(src) card.querySelector('.proj-card-photo').style.backgroundImage = "url('" + src + "')";
       });
-
-      ensureImages(p); // začne stahovat seznam fotek na pozadí hned
     });
   });
 
@@ -651,7 +681,7 @@
   function openModal(project){
     current = project;
     titleEl.textContent = project.name;
-    descEl.textContent = project.desc;
+    descEl.innerHTML = project.desc;
     var meta = '<span><strong>Rok:</strong> ' + project.year + '</span>' +
       '<span><strong>Programy:</strong> ' + project.programs.map(function(k){
         return PROGRAM_META[k] ? PROGRAM_META[k].label : k;
