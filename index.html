@@ -583,39 +583,65 @@
   // jestli tam daná fotka je. Zkouší se postupně víc přípon, takže je jedno, jestli
   // fotku uložíš jako .jpg, .png, .jpeg nebo .webp.
   var EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+  var IS_FILE_PROTOCOL = location.protocol === 'file:';
   function pad2(n){ return n < 10 ? '0' + n : '' + n; }
 
   function probeImage(src){
-    return new Promise(function(resolve){
-      var img = new Image();
-      img.onload = function(){ resolve(true); };
-      img.onerror = function(){ resolve(false); };
-      img.src = src;
-    });
+    if(IS_FILE_PROTOCOL){
+      // Na file:// (dvojklik na index.html bez lokálního serveru) neumí fetch HEAD
+      // fungovat, takže tady zůstáváme u <img> — funguje to, jen to při testování
+      // lokálně stáhne celý soubor. Na ostrém webu (http/https) se tudy vůbec nejde.
+      return new Promise(function(resolve){
+        var img = new Image();
+        img.onload = function(){ resolve(true); };
+        img.onerror = function(){ resolve(false); };
+        img.src = src;
+      });
+    }
+    // Na reálném serveru stačí HEAD dotaz — ověří, že soubor existuje, aniž by se
+    // musel stáhnout celý jeho obsah. Samotná fotka se pak stáhne až ve chvíli,
+    // kdy se opravdu zobrazí (viz showImage), ne už při tomhle ověřování.
+    return fetch(src, { method: 'HEAD', cache: 'no-store' })
+      .then(function(res){ return res.ok; })
+      .catch(function(){ return false; });
   }
 
   // Najde soubor se zadaným základem názvu (bez přípony) mezi podporovanými příponami.
   // Vrátí buď plnou cestu k souboru, nebo null, pokud žádná přípona neexistuje.
+  // Všechny přípony se zkouší NAJEDNOU (paralelně), ne jedna po druhé — je to
+  // podstatně rychlejší. Pořadí v EXTS pořád rozhoduje, která přípona "vyhraje",
+  // pokud by (nestandardně) existovalo víc souborů se stejným základem.
   function findFile(base){
-    function tryExt(i){
-      if(i >= EXTS.length) return Promise.resolve(null);
-      var src = base + '.' + EXTS[i];
-      return probeImage(src).then(function(ok){
-        return ok ? src : tryExt(i + 1);
-      });
-    }
-    return tryExt(0);
+    return Promise.all(EXTS.map(function(ext){
+      var src = base + '.' + ext;
+      return probeImage(src).then(function(ok){ return ok ? src : null; });
+    })).then(function(results){
+      for(var i = 0; i < results.length; i++){ if(results[i]) return results[i]; }
+      return null;
+    });
   }
 
   // Najde souvislou řadu <id>-01.*, <id>-02.*… a zastaví se na první chybějící
   // (mezery v číslování tedy nejsou podporované — čísla musí jít za sebou).
+  // Čísla se zkouší po dávkách (CHUNK najednou paralelně), ne jedno po druhém —
+  // podstatně to zrychlí galerie s víc fotkami.
   function probeGallery(id, maxCount){
     maxCount = maxCount || 40;
-    function step(i, found){
-      if(i > maxCount) return Promise.resolve(found);
-      return findFile('images/projects/' + id + '-' + pad2(i)).then(function(src){
-        if(!src) return found;
-        return step(i + 1, found.concat([src]));
+    var CHUNK = 4;
+    function step(start, found){
+      if(start > maxCount) return Promise.resolve(found);
+      var indices = [];
+      for(var i = start; i < start + CHUNK && i <= maxCount; i++) indices.push(i);
+      return Promise.all(indices.map(function(i){
+        return findFile('images/projects/' + id + '-' + pad2(i));
+      })).then(function(results){
+        var allFound = true;
+        for(var j = 0; j < results.length; j++){
+          if(results[j]){ found = found.concat([results[j]]); }
+          else { allFound = false; break; } // narazili jsme na první díru v dávce
+        }
+        if(!allFound) return found;
+        return step(start + CHUNK, found);
       });
     }
     return step(1, []);
