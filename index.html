@@ -8,7 +8,7 @@
 <link rel="icon" href="images/inicialy.png" type="image/png">
 <link rel="apple-touch-icon" href="images/inicialy.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#1A1A1A; --bg-raise:#202020; --card:#242424;
@@ -19,7 +19,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-padding-top:60px}
-  body{font-family:'Sansation',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;
+  body{font-family:'Red Hat Display',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;
     background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
     background-size:36px 36px}
 
@@ -28,8 +28,9 @@
   .logo{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.05em;transition:color .2s}
   .logo:hover{color:color-mix(in srgb,var(--accent) 50%,#fff 50%)}
   .nav-links{display:flex;gap:2rem;list-style:none}
-  .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;text-transform:uppercase;letter-spacing:.04em}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;text-transform:uppercase;letter-spacing:.04em;transition:color .2s}
   .nav-links a:hover{color:var(--accent)}
+  .nav-links a.active{color:var(--ink);font-weight:700}
   .btn{display:inline-block;padding:11px 22px;border-radius:var(--r);font-size:13px;font-weight:700;
     text-transform:uppercase;letter-spacing:.04em;text-decoration:none;cursor:pointer;border:1px solid transparent;
     transition:background-color .2s,border-color .2s,color .2s}
@@ -77,6 +78,8 @@
   .row span:first-child{color:var(--faint);font-size:12px;line-height:1.7;text-transform:uppercase;white-space:nowrap}
   .row span:last-child{line-height:1.7}
   .row a{color:inherit;text-decoration:none}
+  .row a.accent-link{color:var(--accent);text-decoration:none}
+  .row a.accent-link:hover{text-decoration:underline}
 
   .empty{border:1px dashed var(--line);border-radius:var(--r);padding:3rem;text-align:center;color:var(--faint)}
 
@@ -222,10 +225,10 @@
 <nav>
   <a href="#" class="logo">Vojtěch Srba</a>
   <ul class="nav-links">
-    <li><a href="#about">O mně</a></li>
-    <li><a href="#experience">Zkušenosti</a></li>
-    <li><a href="#education">Vzdělání</a></li>
+    <li><a href="#about">O&nbsp;mně</a></li>
     <li><a href="#projects">Projekty</a></li>
+    <li><a href="#education">Vzdělání</a></li>
+    <li><a href="#experience">Zkušenosti</a></li>
     <li><a href="#contact">Kontakt</a></li>
   </ul>
   <a href="#" class="btn btn-primary" onclick="window.print();return false" style="padding:8px 16px;font-size:12px">Stáhnout CV</a>
@@ -236,8 +239,8 @@
   <div class="hero-bg" aria-hidden="true"></div>
   <div class="hero-content">
     <p class="tag">Projektant junior pozemních staveb</p>
-    <h1>Ing. Vojtěch Srba</h1>
-    <p>Absolvent Fakulty stavební VUT v Brně se specializací na pozemní stavby. Navrhuji stavební řešení s důrazem na přesnost, funkčnost a moderní BIM řešení v prostředí Revit s možností tvoření ve vizualizačních programech.</p>
+    <h1>Ing.&nbsp;Vojtěch Srba</h1>
+    <p>Absolvent Fakulty stavební VUT v&nbsp;Brně se&nbsp;specializací na&nbsp;pozemní stavby. Navrhuji stavební řešení s&nbsp;důrazem na&nbsp;přesnost, funkčnost a&nbsp;moderní BIM řešení v&nbsp;prostředí Revit s&nbsp;možností tvoření ve&nbsp;vizualizačních programech.</p>
     <div class="hero-btns">
       <a href="#projects" class="btn btn-primary">Zobrazit projekty</a>
       <a href="#contact" class="btn btn-outline">Kontaktovat</a>
@@ -247,11 +250,11 @@
 
 <section id="about">
   <div class="container">
-    <h2 class="title">O mně</h2>
+    <h2 class="title">O&nbsp;mně</h2>
     <div class="about-grid">
       <div class="about-text">
-        <p>Jsem absolventem Fakulty stavební VUT v Brně, obor pozemní stavby se specializací na <strong>projektování</strong>. Během studia jsem získal praktické zkušenosti v architektonickém ateliéru a zároveň jsem samostatně a externě realizoval individuální zakázky pro architekty a projektanty.</p>
-        <p>Svou profesní budoucnost vidím v projektování pozemních staveb s důrazem na precizní zpracování dokumentace a efektivní využití moderních BIM nástrojů, především <strong>Revitu</strong>. Jsem pečlivý, spolehlivý a mám zájem se dále profesně rozvíjet.</p>
+        <p>Jsem absolventem Fakulty stavební VUT v&nbsp;Brně, obor pozemní stavby se&nbsp;specializací na&nbsp;<strong>projektování</strong>. Během studia jsem získal praktické zkušenosti v&nbsp;architektonickém ateliéru a&nbsp;zároveň jsem samostatně a&nbsp;externě realizoval individuální zakázky pro architekty a&nbsp;projektanty.</p>
+        <p>Svou profesní budoucnost vidím v&nbsp;projektování pozemních staveb s&nbsp;důrazem na&nbsp;precizní zpracování dokumentace a&nbsp;efektivní využití moderních BIM nástrojů, především <strong>Revitu</strong>. Jsem pečlivý, spolehlivý a&nbsp;mám zájem se&nbsp;dále profesně rozvíjet.</p>
         <div class="skills">
           <span class="tag-pill main"><img src="images/icons/revit.svg" alt="">Revit</span>
           <span class="tag-pill"><img src="images/icons/autocad.svg" alt="">AutoCAD</span>
@@ -265,6 +268,7 @@
         <div class="card-body">
           <h3>Kontaktní údaje</h3>
           <div class="row"><span>Email</span><span>vojtech.srba@email.cz</span></div>
+          <div class="row"><span>LinkedIn</span><span><a class="accent-link" href="https://www.linkedin.com/in/vojt%C4%9Bch-srba-b74107273/" target="_blank" rel="noopener">Vojtěch Srba</a></span></div>
           <div class="row"><span>Telefon</span><span>605 150 523</span></div>
           <div class="row"><span>Město</span><span>Brno</span></div>
           <div class="row"><span>Řidičský průkaz</span><span>Skupina B</span></div>
@@ -279,71 +283,29 @@
   </div>
 </section>
 
-<section id="experience">
-  <div class="container">
-    <h2 class="title">Zkušenosti</h2>
-    <div class="section-center">
-    <div class="edu-grid">
-      <div class="edu-card">
-        <p class="yr">Přibližně rok, v průběhu studia</p>
-        <h3>Architektonický ateliér A77</h3>
-        <p>Spolupráce s architektonickým ateliérem A77 na přípravě projektové dokumentace pozemních staveb.<br><a href="http://www.arch77.cz/" target="_blank" rel="noopener">arch77.cz</a></p>
-      </div>
-      <div class="edu-card">
-        <p class="yr">V průběhu celého studia</p>
-        <h3>Ing. Pavel Srba — Srba Projekt</h3>
-        <p>Externí spolupráce na individuálních zakázkách pro Ing. Pavla Srbu, zaměřená na zpracování projektové dokumentace pozemních staveb.<br><a href="https://www.srbaprojekt.cz/" target="_blank" rel="noopener">srbaprojekt.cz</a></p>
-      </div>
-    </div>
-    </div>
-  </div>
-</section>
-
-<section id="education" style="background:var(--bg-raise)">
-  <div class="container">
-    <h2 class="title">Vzdělání</h2>
-    <div class="section-center">
-    <div class="edu-grid">
-      <div class="edu-card">
-        <img class="logo" src="images/vut-fast.svg" alt="Logo FAST VUT v Brně">
-        <p class="yr">Magisterské studium</p>
-        <h3>FAST VUT v Brně</h3>
-        <p>Fakulta stavební, obor pozemní stavby — projektování.</p>
-      </div>
-      <div class="edu-card">
-        <img class="logo" src="images/gymnazium-vsetin.svg" alt="Logo Gymnázium Vsetín">
-        <p class="yr">Čtyřleté studium</p>
-        <h3>Gymnázium Vsetín</h3>
-        <p>Všeobecné zaměření, maturita z angličtiny, matematiky a deskriptivní geometrie.</p>
-      </div>
-    </div>
-    </div>
-  </div>
-</section>
-
 <section id="projects">
   <div class="container">
     <h2 class="title">Vybrané projekty</h2>
 
     <div class="proj-cat">
       <div class="proj-cat-head">
-        <h3>Projekty ze školy</h3>
-        <p>Ateliérové návrhy a závěrečné práce z FAST VUT.</p>
+        <h3>Projekty ze&nbsp;školy</h3>
+        <p>Ateliérové návrhy a&nbsp;závěrečné práce z&nbsp;FAST VUT.</p>
       </div>
       <div class="proj-scroll" data-cat="skola"></div>
     </div>
 
     <div class="proj-cat">
       <div class="proj-cat-head">
-        <h3>Projekty z praxe</h3>
-        <p>Realizace a dokumentace z profesní praxe.</p>
+        <h3>Projekty z&nbsp;praxe</h3>
+        <p>Realizace a&nbsp;dokumentace z&nbsp;profesní praxe.</p>
       </div>
       <div class="proj-scroll" data-cat="praxe"></div>
     </div>
 
     <div class="proj-cat">
       <div class="proj-cat-head">
-        <h3>Ukázky z Revitu</h3>
+        <h3>Ukázky z&nbsp;Revitu</h3>
         <p>Samostatně vytvořené rodiny.</p>
       </div>
       <div class="proj-scroll" data-cat="revit"></div>
@@ -379,13 +341,55 @@
   </button>
 </div>
 
+<section id="education" style="background:var(--bg-raise)">
+  <div class="container">
+    <h2 class="title">Vzdělání</h2>
+    <div class="section-center">
+    <div class="edu-grid">
+      <div class="edu-card">
+        <img class="logo" src="images/vut-fast.svg" alt="Logo FAST VUT v&nbsp;Brně">
+        <p class="yr">Magisterské studium</p>
+        <h3>FAST VUT v Brně</h3>
+        <p>Fakulta stavební, obor pozemní stavby — projektování.</p>
+      </div>
+      <div class="edu-card">
+        <img class="logo" src="images/gymnazium-vsetin.svg" alt="Logo Gymnázium Vsetín">
+        <p class="yr">Čtyřleté studium</p>
+        <h3>Gymnázium Vsetín</h3>
+        <p>Všeobecné zaměření, maturita z&nbsp;angličtiny, matematiky a&nbsp;deskriptivní geometrie.</p>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <h2 class="title">Zkušenosti</h2>
+    <div class="section-center">
+    <div class="edu-grid">
+      <div class="edu-card">
+        <p class="yr">Přibližně rok, v&nbsp;průběhu studia</p>
+        <h3>Architektonický ateliér A77</h3>
+        <p>Spolupráce s&nbsp;architektonickým ateliérem A77 na&nbsp;přípravě projektové dokumentace pozemních staveb.<br><a href="http://www.arch77.cz/" target="_blank" rel="noopener">arch77.cz</a></p>
+      </div>
+      <div class="edu-card">
+        <p class="yr">V&nbsp;průběhu celého studia</p>
+        <h3>Ing.&nbsp;Pavel Srba</h3>
+        <p>Externí spolupráce na&nbsp;individuálních zakázkách pro Ing.&nbsp;Pavla Srbu, zaměřená na&nbsp;zpracování projektové dokumentace pozemních staveb.<br><a href="https://www.srbaprojekt.cz/" target="_blank" rel="noopener">srbaprojekt.cz</a></p>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="container">
     <h2 class="title">Pojďme spolupracovat</h2>
-    <p>Hledáte projektanta juniora pozemních staveb se zaměřením na moderní BIM řešení? Rád s Vámi proberu možnou spolupráci.</p>
+    <p>Hledáte projektanta juniora pozemních staveb se&nbsp;zaměřením na&nbsp;moderní BIM řešení? Rád s&nbsp;Vámi proberu možnou spolupráci.</p>
     <a href="mailto:vojtech.srba@email.cz" class="cta-email">vojtech.srba@email.cz</a>
     <div class="footer-bottom">
-      <span>© 2026 Ing. Vojtěch Srba</span>
+      <span>© 2026 Ing.&nbsp;Vojtěch Srba</span>
       <span>Brno, CZ</span>
       <span>Projektant junior pozemních staveb</span>
     </div>
@@ -763,6 +767,47 @@
     if(Math.abs(diff) > 40) showImage(imgIndex + (diff < 0 ? 1 : -1));
     touchX = null;
   }, {passive:true});
+})();
+</script>
+
+<script>
+(function(){
+  // Zvýrazní v navigaci odkaz na sekci, ve které se právě nacházíme.
+  var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  var sections = []; // { id, el, link }
+  navLinks.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if(el) sections.push({ id: id, el: el, link: a });
+  });
+  if(!sections.length) return;
+
+  var current = null;
+
+  function setActive(id){
+    if(id === current) return;
+    current = id;
+    navLinks.forEach(function(a){ a.classList.remove('active'); });
+    var match = sections.find(function(s){ return s.id === id; });
+    if(match) match.link.classList.add('active');
+  }
+
+  // Jednoduché a spolehlivé: najdi poslední sekci, jejíž horní okraj je už nad
+  // aktuální pozicí scrollu (s odečtením výšky fixní navigace). Žádné hádání
+  // podle "viditelnosti" — jen přímé porovnání pozic, funguje pro sekce
+  // libovolné výšky a nezávisle na pořadí scroll eventů.
+  function update(){
+    var y = window.scrollY + 60 + 1;
+    var activeId = null;
+    for(var i = 0; i < sections.length; i++){
+      if(sections[i].el.offsetTop <= y) activeId = sections[i].id;
+    }
+    setActive(activeId);
+  }
+
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update, {passive:true});
+  update();
 })();
 </script>
 </body>
