@@ -102,8 +102,11 @@
     font:inherit;color:inherit;text-align:left;padding:0;scroll-snap-align:start;
     transition:border-color .2s}
   .proj-card:hover,.proj-card:focus-visible{border-color:var(--accent)}
+  .proj-card:hover .proj-card-name,.proj-card:focus-visible .proj-card-name,.proj-card:active .proj-card-name{
+    background:var(--accent);color:#1A1A1A}
   .proj-card-photo{width:100%;padding-top:66.67%;background:#4d4d4d;background-size:cover;background-position:center}
-  .proj-card-name{padding:.9rem 1rem;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .proj-card-name{padding:.9rem 1rem;font-size:14px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;
+    transition:background-color .2s,color .2s}
   @media(min-width:801px){
     .proj-card{flex-basis:190px}
   }
@@ -515,20 +518,22 @@
   // (…-01, -02, -03…), zero-padded to two digits.
   var PROJECTS = {
     skola: [
-      { id:'skola-01', name:'Projekt z předmětu: Nauka o budovách', year:'2023', programs:['revit','lumion'],
-        desc:'Projekt zpracovaný v rámci předmětu Nauka o budovách.' },
-      { id:'skola-02', name:'Bakalářská práce - Bytový dům', year:'2024', programs:['autocad','cadkon','revit','lumion'],
+      { id:'skola-01', name:'Projekt z&nbsp;předmětu: Nauka o&nbsp;budovách', year:'2023', programs:['revit','lumion'],
+        desc:'Projekt zpracovaný v rámci předmětu Nauka o budovách. Vizualizace je přímý výsledek z Lumionu, bez postprodukce a AI.' },
+      { id:'skola-02', name:'Bakalářská práce: Bytový dům', year:'2024', programs:['autocad','cadkon','revit','lumion'],
         grade:'B', link:'https://www.vut.cz/studenti/zav-prace/detail/158440',
-        desc:'Bakalářská práce zpracovaná v rámci studia na FAST VUT.' },
-      { id:'skola-03', name:'Diplomová práce - Ateliér s kavárnou, Malenovice', year:'2026', programs:['autocad','cadkon','revit','twinmotion'],
+        desc:'Bakalářská práce zpracovaná v rámci studia na FAST VUT. Vizualizace je přímý výsledek z Lumionu, bez postprodukce a AI.' },
+      { id:'skola-03', name:'Diplomová práce: Ateliér s&nbsp;kavárnou, Malenovice', year:'2026', programs:['autocad','cadkon','revit','lumion'],
         grade:'A', link:'https://www.vut.cz/studenti/zav-prace/detail/169217',
-        desc:'Diplomová práce zpracovaná v rámci studia na FAST VUT. Všechny rodiny, které jsou součástí projektu, jsem si sám vytvořil (výjimku tvoří nábytek a zařizovací předměty, které jsem použil z původního free balíku rodin od <a href="https://www.adeon.cz/" target="_blank" rel="noopener">adeon.cz</a>, který dnes již není k dohledání).' }
+        desc:'Diplomová práce zpracovaná v rámci studia na FAST VUT. Všechny rodiny, které jsou součástí projektu, jsem si sám vytvořil (výjimku tvoří nábytek a zařizovací předměty, které jsem použil z původního free balíku rodin od <a href="https://www.adeon.cz/" target="_blank" rel="noopener">adeon.cz</a>, který dnes již není k dohledání). Vizualizace je přímý výsledek z Lumionu, bez postprodukce a AI.' }
     ],
     praxe: [
       { id:'praxe-01', name:'Kulturní dům Valašská Polanka', year:'2026', programs:['revit','twinmotion'],
-        desc:'Vizualizace v rámci studie rekonstrukce kulturního domu ve Valašské Polance.' },
-      { id:'praxe-02', name:'Rodinné domy u Luhačovic', year:'2026', programs:['revit','twinmotion'],
-        desc:'Vizualizace dvou novostaveb rodinných domů.' }
+        desc:'Vizualizace v rámci studie rekonstrukce kulturního domu ve Valašské Polance. Všechny rodiny, které jsou součástí projektu, jsem si sám vytvořil. Vizualizace je přímý výsledek z Twinmotionu, bez postprodukce a AI.' },
+      { id:'praxe-02', name:'Rodinný dům č.&nbsp;1 u&nbsp;Luhačovic', year:'2026', programs:['revit','twinmotion'],
+        desc:'Vizualizace novostavby rodinného domu nacházejícího se poblíž Luhačovic. Všechny rodiny, které jsou součástí projektu, jsem si sám vytvořil. Vizualizace je přímý výsledek z Twinmotionu, bez postprodukce a AI.' },
+      { id:'praxe-03', name:'Rodinný dům č.&nbsp;2 u&nbsp;Luhačovic', year:'2026', programs:['revit','twinmotion'],
+        desc:'Vizualizace novostavby rodinného domu nacházejícího se poblíž Luhačovic. Všechny rodiny, které jsou součástí projektu, jsem si sám vytvořil. Vizualizace je přímý výsledek z Twinmotionu, bez postprodukce a AI.' }
     ],
     revit: [
       { id:'revit-01', name:'Jednokřídlé dveře', year:'2025', programs:['revit'],
